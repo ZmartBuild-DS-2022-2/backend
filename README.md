@@ -2,36 +2,9 @@
 
 ## How to run it in development mode?
 
-The backend runs using an Express Server Application based on Node JS. First of all, you need to run:
+The backend runs using an Express Server Application based on Node JS.
 
-```bash
-npm install
-```
+1. Create a `.env` and paste into it the content of [example.env](example.env)
 
-Now, you have to set the environment variables in a file named `.env`. Should follow the same structure as [example.env](./example.env) with these variables:
-
-- `PORT` (_required_): Establishes the port where the server will run.
-
-- `ORIGIN` (_optional_): Sets the valid origin for requests (CORS). The default value is 'localhost' and it works for dockerized DDBB.
-
-- `DB_USER` (_required_): Sets a username for database. With the dockerized DDBB you can use any name.
-
-- `DB_NAME` (_required_): Sets the database name. With the dockerized DDBB you can use any valid value.
-
-- `DB_PASSWORD` (_required_): Sets the password for database. With the dockerized DDBB you can use any valid value.
-
-- `DB_ROOT_PASSWORD` (_required_): Sets the root password for database. With the dockerized DDBB you can use any valid value.
-
-- `DB_HOST` (_optional_): Sets the host for database. The default value is 'localhost' and it works for dockerized DDBB.
-
-After setting environment variables, you need an available MySQL database. You can use the dockerized DDBB only using [Docker Compose](https://docs.docker.com/compose/) with this command:
-
-```bash
-docker-compose up
-```
-
-Finally, start the application in development mode using the following command:
-
-```bash
-npm run dev
-```
+2. Run `docker-compose up`
+3. To check that the backend is working properly go to [localhost/index/ping](http://localhost/index/ping)

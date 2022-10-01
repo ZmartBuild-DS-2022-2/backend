@@ -1,10 +1,13 @@
 FROM node:current-alpine
 
-RUN mkdir /api
-WORKDIR /api
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-COPY ["package.json", "package-lock.json*", "./"]
+
+COPY package.json /usr/src/app/
 RUN npm install
 
-CMD ["npm", "start"]
-EXPOSE 3000
+COPY . /usr/src/app
+
+CMD ["npm", "run" , "dev"]
+EXPOSE 5000

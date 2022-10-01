@@ -1,24 +1,27 @@
 version: '3.8'
 services:
-  # api:
+  api:
+    build:
+      context: .
 
-  #   build:
-  #     context: .
-  #   networks:
-  #     - app-network
-  #   depends_on:
-  #     - db
+    volumes:
+      - .:/api
+      - /api/node_modules
+    networks:
+      - app-network
+    depends_on:
+      - db
 
-  # nginx:
-  #   image: nginx:latest
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./nginx:/etc/nginx/conf.d
-  #   networks:
-  #     - app-network
-  #   depends_on:
-  #     - api
+  nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - app-network
+    depends_on:
+      - api
   db:
     platform: linux/x86_64
     image: mysql:8.0
@@ -31,7 +34,6 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_ROOT_HOST: '%'
     ports:
       - '3306:3306'
     volumes:
