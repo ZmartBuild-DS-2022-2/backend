@@ -1,0 +1,18 @@
+version: 0.0
+os: linux
+files:
+  - source: .
+    destination: /home/ubuntu/app
+hooks:
+  ApplicationStop:
+    - location: aws/scripts/stop_container.sh
+      timeout: 300
+  BeforeInstall:
+    - location: aws/scripts/before_install.sh
+      timeout: 300
+  AfterInstall:
+    - location: aws/scripts/after_install.sh
+      timeout: 300
+  ApplicationStart:
+    - location: aws/scripts/boot.sh
+      timeout: 300
