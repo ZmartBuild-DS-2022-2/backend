@@ -1,5 +1,27 @@
 version: '3.8'
 services:
+  api:
+    build:
+      context: .
+
+    volumes:
+      - .:/api
+      - /api/node_modules
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - app-network
+    depends_on:
+      - api
   db:
     platform: linux/x86_64
     image: mysql:8.0
@@ -17,7 +39,13 @@ services:
     volumes:
       - db:/var/lib/mysql
     command: mysqld --sql_mode=""
+    networks:
+      - app-network
 
 volumes:
   db:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge
