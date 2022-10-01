@@ -1,5 +1,24 @@
 version: '3.8'
 services:
+  # api:
+
+  #   build:
+  #     context: .
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - db
+
+  # nginx:
+  #   image: nginx:latest
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx:/etc/nginx/conf.d
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - api
   db:
     platform: linux/x86_64
     image: mysql:8.0
@@ -12,12 +31,19 @@ services:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_ROOT_HOST: '%'
     ports:
       - '3306:3306'
     volumes:
       - db:/var/lib/mysql
     command: mysqld --sql_mode=""
+    networks:
+      - app-network
 
 volumes:
   db:
     driver: local
+
+networks:
+  app-network:
+    driver: bridge
