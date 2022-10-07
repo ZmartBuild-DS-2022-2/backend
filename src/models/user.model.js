@@ -30,6 +30,13 @@ const UserModel = (sequelize, type) => {
         notEmpty: { args: true, msg: "Password provided can't be empty" },
       },
     },
+    imgUrl: {
+      type: type.STRING,
+      allowNull: true,
+      validate: {
+        isUrl: { args: true, msg: "Image provided is not valid" },
+      },
+    },
   })
 }
 

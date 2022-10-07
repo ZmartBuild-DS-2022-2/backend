@@ -8,8 +8,10 @@ const registerController = async (req, res) => {
 
   const user = User.build(req.body)
   try {
-    await user.save({ fields: ["email", "fullname", "password"] })
-    return res.sendStatus(201)
+    const newUser = await user.save({ fields: ["email", "fullname", "password"] })
+    return res
+      .status(201)
+      .json({ id: newUser.id, email: newUser.email, fullname: newUser.fullname })
   } catch (err) {
     return res.status(400).send(err.errors[0]?.message)
   }

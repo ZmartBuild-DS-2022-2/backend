@@ -9,7 +9,10 @@ const loginController = async (req, res) => {
   if (user && email === user.email && password === user.password) {
     const content = { id: user.id, email: user.email }
     const token = jsonwebtoken.sign(content, JWT_SECRET, { expiresIn: "3d" })
-    return res.cookie("access_token", token, { httpOnly: true, secure: false }).sendStatus(200)
+    return res
+      .status(200)
+      .cookie("access_token", token, { httpOnly: true, secure: false })
+      .json({ id: user.id, email: user.email, fullname: user.fullname })
   }
 
   return res.status(401).send("Wrong email or password")

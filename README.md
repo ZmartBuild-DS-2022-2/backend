@@ -8,4 +8,3 @@ The backend runs using an Express Server Application based on Node JS.
 
 2. Run `docker-compose up`
 3. To check that the backend is working properly go to [localhost/index/ping](http://localhost/index/ping)
-
