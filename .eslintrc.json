@@ -12,7 +12,6 @@
   "rules": {
     "no-console": "warn",
     "max-len": ["error", { "code": 100 }],
-    "quotes": ["error", "single"],
     "semi": ["error", "never"]
   }
 }

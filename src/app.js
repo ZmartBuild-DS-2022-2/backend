@@ -1,24 +1,27 @@
-import express from 'express'
-import morgan from 'morgan'
-import cors from 'cors'
+import cookieParser from "cookie-parser"
+import express from "express"
+import morgan from "morgan"
+import cors from "cors"
 
-import authRoutes from './routes/auth.routes.js'
-import index from './routes/index.js'
-import { PORT, ORIGIN } from './config/config.js'
+import authRoutes from "./routes/auth.routes.js"
+import dummyRoutes from "./routes/index.js"
+import { PORT, ORIGIN } from "./config/config.js"
 
 const app = express()
 
 // Settings
-app.set('port', PORT)
-app.set('json spaces', 4)
+app.set("port", PORT)
+app.set("json spaces", 4)
 
-// Middlewares
-app.use(cors({ origin: ORIGIN }))
-app.use(morgan('dev'))
+// Extra settings and utils middlewares
+app.use(cors({ origin: ORIGIN, credentials: true }))
+app.use(morgan("dev"))
 app.use(express.json())
+app.use(cookieParser())
+app.use(express.urlencoded({ extended: false }))
 
 // Routes
-app.use('/api/auth', authRoutes)
-app.use('/index', index)
+app.use("/api/auth", authRoutes)
+app.use("/api/dummy", dummyRoutes)
 
 export default app
