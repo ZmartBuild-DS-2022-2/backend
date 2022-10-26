@@ -13,7 +13,7 @@ const registerController = async (req, res) => {
       .status(201)
       .json({ id: newUser.id, email: newUser.email, fullname: newUser.fullname })
   } catch (err) {
-    return res.status(400).send(err.errors[0]?.message)
+    return res.status(400).json(err)
   }
 }
 

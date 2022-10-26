@@ -9,6 +9,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jsonwebtoken.verify(access_token, JWT_SECRET)
+    // eslint-disable-next-line no-console
     console.log(decoded)
   } catch (err) {
     return res.sendStatus(401)
