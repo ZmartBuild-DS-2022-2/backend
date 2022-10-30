@@ -1,51 +1,18 @@
 version: "3.8"
 services:
-  api:
-    build:
-      context: .
-
-    volumes:
-      - .:/api
-      - /api/node_modules
-    networks:
-      - app-network
-    depends_on:
-      - db
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-    networks:
-      - app-network
-    depends_on:
-      - api
   db:
-    platform: linux/x86_64
-    image: mysql:8.0
-    cap_add:
-      - SYS_NICE
+    image: postgres
     restart: always
     env_file: .env
     environment:
-      MYSQL_USER: ${DB_USER}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_ROOT_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db:/var/lib/mysql
-    command: mysqld --sql_mode=""
-    networks:
-      - app-network
+      - db:/var/lib/postgresql/data
 
 volumes:
   db:
     driver: local
-
-networks:
-  app-network:
-    driver: bridge
