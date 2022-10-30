@@ -19,6 +19,8 @@ Now, you have to set the environment variables in a file named `.env`. Should fo
 
 - `DB_PASSWORD` (*required*): Sets the password for database. With the dockerized DDBB you can use any valid value.
 
+- `JWT_SECRET` (*required*): Sets the secret key to create assigned to JWT.
+
 
 After setting environment variables, you need an available Postgres database. You can use the dockerized DDBB only using [Docker Compose](https://docs.docker.com/compose/) with this command:
 ```bash
