@@ -1,5 +1,5 @@
 # Backend
-
+deploy url: https://backend-production-e56e.up.railway.app/api
 ## How to run it in development mode?
 
 The backend runs using an Express Server Application based on Node JS. First of all, you need to run:
