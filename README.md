@@ -9,20 +9,21 @@ npm install
 ```
 
 Now, you have to set the environment variables in a file named `.env`. Should follow the same structure as [example.env](./example.env) with these variables:
-- `PORT` (*required*): Establishes the port where the server will run.
 
-- `ORIGIN` (*optional*): Sets the valid origin for requests (CORS). The default value is 'localhost' and it works for dockerized DDBB.
+- `PORT` (_required_): Establishes the port where the server will run.
 
-- `DB_USER` (*required*): Sets a username for database. With the dockerized DDBB you can use any name.
+- `ORIGIN` (_optional_): Sets the valid origin for requests (CORS). The default value is 'localhost' and it works for dockerized DDBB.
 
-- `DB_NAME` (*required*): Sets the database name. With the dockerized DDBB you can use any valid value.
+- `DB_USER` (_required_): Sets a username for database. With the dockerized DDBB you can use any name.
 
-- `DB_PASSWORD` (*required*): Sets the password for database. With the dockerized DDBB you can use any valid value.
+- `DB_NAME` (_required_): Sets the database name. With the dockerized DDBB you can use any valid value.
 
-- `JWT_SECRET` (*required*): Sets the secret key to create assigned to JWT.
+- `DB_PASSWORD` (_required_): Sets the password for database. With the dockerized DDBB you can use any valid value.
 
+- `JWT_SECRET` (_required_): Sets the secret key to create assigned to JWT.
 
 After setting environment variables, you need an available Postgres database. You can use the dockerized DDBB only using [Docker Compose](https://docs.docker.com/compose/) with this command:
+
 ```bash
 docker-compose up
 ```
