@@ -1,14 +1,9 @@
-import { Router } from 'express'
+import { Router } from "express"
 
 const router = Router()
 
-/* GET home page. */
-router.get('/ping', (req, res) => {
-  res.status(200).json({ message: 'pong' })
-})
-
-router.get('/test', (req, res) => {
-  res.status(200).json({ message: 'working' })
+router.get("/ping", (req, res) => {
+  res.status(200).json({ message: "pong" })
 })
 
 export default router
