@@ -3,7 +3,7 @@ import { config } from "dotenv"
 // Load environment variables
 config()
 export const PORT = process.env.PORT || 3000
-export const ORIGIN = process.env.ORIGIN || "localhost"
+export const ORIGIN = process.env.ORIGIN || "http://localhost:3000"
 export const JWT_SECRET = process.env.JWT_SECRET
 
 // Database environment and configuration variables
