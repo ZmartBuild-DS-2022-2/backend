@@ -100,12 +100,12 @@ const uploadDirectory = async function uploadDirectory({ path, params, options, 
     console.time("s3 upload")
 
     await uploadDirectory({
-      path: "test",
+      path: "test", // path to folder to be uploaded, this folder isn't uploaded
       params: {
         Bucket: process.env.AWS_BUCKET_NAME,
       },
       options: {},
-      rootKey: "test",
+      rootKey: "model_id/model_id", //this should be something like this
     })
 
     console.timeEnd("s3 upload")
