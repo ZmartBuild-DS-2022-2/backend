@@ -20,6 +20,8 @@ const s3 = new AWS.S3({
   signatureVersion: "v4",
 })
 
+let binFileUrl = ""
+
 const uploadFile = async function uploadFile({ path, params, options } = {}) {
   const parameters = { ...params }
   const opts = { ...options }
@@ -33,7 +35,8 @@ const uploadFile = async function uploadFile({ path, params, options } = {}) {
 
     parameters.Body = rstream
     parameters.ContentType = getMIMEType(path)
-    await s3.upload(parameters, opts).promise()
+    const data = await s3.upload(parameters, opts).promise()
+    if (parameters.ContentType == "application/octet-stream") binFileUrl = data.Location
 
     // eslint-disable-next-line max-len
     console.info(
@@ -95,21 +98,24 @@ const uploadDirectory = async function uploadDirectory({ path, params, options, 
 }
 
 // example
-;(async () => {
+const uploadModelFiles = async (project_id, model_id, folderPath) => {
   try {
     console.time("s3 upload")
 
     await uploadDirectory({
-      path: "test", // path to folder to be uploaded, this folder isn't uploaded
+      path: folderPath, // path to folder to be uploaded, this folder isn't uploaded
       params: {
         Bucket: process.env.AWS_BUCKET_NAME,
       },
       options: {},
-      rootKey: "model_id/model_id", //this should be something like this
+      rootKey: `${project_id}/${model_id}`, //this should be something like this
     })
 
     console.timeEnd("s3 upload")
+    console.log(binFileUrl) // this should be saved in the model modelUrl attribute
   } catch (e) {
     console.error(e)
   }
-})()
+}
+
+uploadModelFiles("project_id", "model_id", "test")
