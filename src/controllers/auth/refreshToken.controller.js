@@ -3,6 +3,9 @@ import { JWT_SECRET } from "../../config/config.js"
 
 const refreshTokenController = async (req, res) => {
   const currentUser = req.currentUser
+  if (!currentUser) {
+    return res.status(400).json({ message: "couldn't find current user" })
+  }
   const content = { id: currentUser.id, email: currentUser.email }
   const token = jsonwebtoken.sign(content, JWT_SECRET, { expiresIn: "3d" })
   return res
