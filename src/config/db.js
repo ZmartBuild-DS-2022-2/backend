@@ -6,7 +6,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
   dialect: "postgres",
-  protocol: 'postgres',
+  protocol: "postgres",
   dialectOptions: {
     ssl: DB_SSL,
   },
