@@ -11,12 +11,14 @@ const verifyToken = async (req, res, next) => {
   try {
     const { id, email } = jsonwebtoken.verify(access_token, JWT_SECRET)
     const currentUser = await User.findOne({ where: { id, email } })
+    if (!currentUser) {
+      return res.sendStatus(401)
+    }
     req.currentUser = currentUser
+    return next()
   } catch (err) {
     return res.clearCookie("access_token").sendStatus(401)
   }
-
-  return next()
 }
 
 export default verifyToken
