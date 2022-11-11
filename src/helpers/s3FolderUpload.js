@@ -22,11 +22,12 @@ const uploadFile = async function uploadFile({ file, params } = {}) {
     parameters.Body = file.data
     parameters.ContentType = file.mimetype
     const data = await s3.upload(parameters).promise()
-    if (file.name.split('.')[1] == "gltf") gltfFileUrl = data.Location
-
+    if (file.name.split(".")[1] == "gltf") gltfFileUrl = data.Location
   } catch (e) {
     throw new CustomException(
-      `unable to upload file ${file.name} at ${parameters.Key}, ${e.message}`, 400)
+      `unable to upload file ${file.name} at ${parameters.Key}, ${e.message}`,
+      400
+    )
   }
 
   return true
@@ -46,14 +47,13 @@ const filesValidation = (files) => {
       else throw new CustomException("Received more than one gltf file", 400)
     }
   })
-  
+
   if (!binFile) throw new CustomException("Must send bin file", 400)
   if (!gltfFile) throw new CustomException("Must send gltf file", 400)
   return [binFile, gltfFile]
 }
 
 export const uploadModelFilesToS3 = async (model_id, files) => {
-
   const filesToUpload = filesValidation(files)
   const parameters = { Bucket: process.env.AWS_BUCKET_NAME }
   const folderPath = `${model_id}/`
@@ -62,7 +62,7 @@ export const uploadModelFilesToS3 = async (model_id, files) => {
       parameters.Key = join(folderPath, file.name)
       await uploadFile({
         file,
-        params: parameters
+        params: parameters,
       })
     })
   )

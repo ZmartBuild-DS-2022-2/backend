@@ -7,5 +7,4 @@ function CustomException(message, code) {
 
 CustomException.prototype = Object.create(Error.prototype)
 
-
 export default CustomException
