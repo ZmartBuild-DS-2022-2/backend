@@ -14,7 +14,7 @@ const s3 = new AWS.S3({
   signatureVersion: "v4",
 })
 
-let gltfFile = ""
+let gltfFileUrl = ""
 
 const uploadFile = async function uploadFile({ file, params } = {}) {
   const parameters = { ...params }
@@ -22,7 +22,7 @@ const uploadFile = async function uploadFile({ file, params } = {}) {
     parameters.Body = file.data
     parameters.ContentType = file.mimetype
     const data = await s3.upload(parameters).promise()
-    if (file.name.split('.')[1] == "gltf") gltfFile = data.Location
+    if (file.name.split('.')[1] == "gltf") gltfFileUrl = data.Location
 
   } catch (e) {
     throw new CustomException(
@@ -33,10 +33,7 @@ const uploadFile = async function uploadFile({ file, params } = {}) {
 }
 
 const filesValidation = (files) => {
-
-  console.log(files)
   const filesAsArray = Object.values(files)
-  console.log(filesAsArray)
   let binFile = false
   let gltfFile = false
   filesAsArray.forEach((element) => {
@@ -69,5 +66,5 @@ export const uploadModelFilesToS3 = async (model_id, files) => {
       })
     })
   )
-  return gltfFile // this value should be saved in the model modelUrl attribute
+  return gltfFileUrl
 }

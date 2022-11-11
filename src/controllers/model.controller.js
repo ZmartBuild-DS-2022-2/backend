@@ -5,11 +5,12 @@ const modelUpload = async (req, res) => {
   if (!files) return res.status(400).send("You must send files field")
   if (files.length == 0) return res.status(400).send("No files sended")
   try {
-    const gltfFile = await uploadModelFilesToS3("model_id", files)
-    res.status(200).json({ gltfFile })
+    const gltfFileUrl = await uploadModelFilesToS3("model_id", files)
+    // gltfFileUrl must be saved in the model created
+    res.status(200).json({ gltfFileUrl })
   } catch (err) {
-    if (err.code) return res.status(err.code).json(err)
-    return res.status(400).json(err)
+    if (err.code) return res.status(err.code).send(err.message)
+    return res.status(400).send(err.message)
   }
 }
 
