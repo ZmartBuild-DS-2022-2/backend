@@ -97,8 +97,7 @@ const uploadDirectory = async function uploadDirectory({ path, params, options, 
   return true
 }
 
-// example
-const uploadModelFiles = async (project_id, model_id, folderPath) => {
+export const uploadModelFiles = async (project_id, model_id, filesToUpload) => {
   try {
     console.time("s3 upload")
 
@@ -108,14 +107,12 @@ const uploadModelFiles = async (project_id, model_id, folderPath) => {
         Bucket: process.env.AWS_BUCKET_NAME,
       },
       options: {},
-      rootKey: `${project_id}/${model_id}`, //this should be something like this
+      rootKey: `${project_id}/${model_id}`, // something like this, can change according to modeling
     })
 
     console.timeEnd("s3 upload")
-    console.log(binFileUrl) // this should be saved in the model modelUrl attribute
+    return binFileUrl // this value should be saved in the model modelUrl attribute
   } catch (e) {
     console.error(e)
   }
 }
-
-uploadModelFiles("project_id", "model_id", "test")

@@ -97,8 +97,7 @@ const uploadDirectory = async function uploadDirectory({ path, params, options, 
   return true
 }
 
-// example
-export const uploadModelFiles = async (project_id, model_id, folderPath) => {
+export const uploadModelFiles = async (project_id, model_id, filesToUpload) => {
   try {
     console.time("s3 upload")
 
@@ -112,7 +111,7 @@ export const uploadModelFiles = async (project_id, model_id, folderPath) => {
     })
 
     console.timeEnd("s3 upload")
-    console.log(binFileUrl) // this value should be saved in the model modelUrl attribute
+    return binFileUrl // this value should be saved in the model modelUrl attribute
   } catch (e) {
     console.error(e)
   }
