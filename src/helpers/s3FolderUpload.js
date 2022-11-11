@@ -1,18 +1,12 @@
 /* eslint-disable no-console */
 import AWS from "aws-sdk"
-import fs from "fs"
 import { config } from "dotenv"
-import { resolve, join } from "path"
-import pkg from "node-mime-types"
-const { getMIMEType } = pkg
+import { join } from "path"
 
-const { readdir } = fs.promises
+import CustomException from "./customeException.js"
+
 // Load environment variables
 config()
-
-const isDir = (dirPath) => {
-  return fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()
-}
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -20,99 +14,60 @@ const s3 = new AWS.S3({
   signatureVersion: "v4",
 })
 
-let binFileUrl = ""
+let gltfFile = ""
 
-const uploadFile = async function uploadFile({ path, params, options } = {}) {
+const uploadFile = async function uploadFile({ file, params } = {}) {
   const parameters = { ...params }
-  const opts = { ...options }
-
   try {
-    const rstream = fs.createReadStream(resolve(path))
+    parameters.Body = file.data
+    parameters.ContentType = file.mimetype
+    const data = await s3.upload(parameters).promise()
+    if (file.name.split('.')[1] == "gltf") gltfFile = data.Location
 
-    rstream.once("error", (err) => {
-      console.error(`unable to upload file ${path}, ${err.message}`)
-    })
-
-    parameters.Body = rstream
-    parameters.ContentType = getMIMEType(path)
-    const data = await s3.upload(parameters, opts).promise()
-    if (parameters.ContentType == "application/octet-stream") binFileUrl = data.Location
-
-    // eslint-disable-next-line max-len
-    console.info(
-      `${parameters.Key} (${parameters.ContentType}) uploaded in bucket ${parameters.Bucket}`
-    )
   } catch (e) {
-    throw new Error(`unable to upload file ${path} at ${parameters.Key}, ${e.message}`)
+    throw new CustomException(
+      `unable to upload file ${file.name} at ${parameters.Key}, ${e.message}`, 400)
   }
 
   return true
 }
 
-// upload directory and its sub-directories if any
-const uploadDirectory = async function uploadDirectory({ path, params, options, rootKey } = {}) {
-  const parameters = { ...params }
-  const opts = { ...options }
-  const root = rootKey && rootKey.constructor === String ? rootKey : ""
-  let dirPath
+const filesValidation = (files) => {
 
-  try {
-    dirPath = resolve(path)
-
-    if (!isDir(dirPath)) {
-      throw new Error(`${dirPath} is not a directory`)
+  console.log(files)
+  const filesAsArray = Object.values(files)
+  console.log(filesAsArray)
+  let binFile = false
+  let gltfFile = false
+  filesAsArray.forEach((element) => {
+    if (element.name.split(".")[1] == "bin") {
+      if (!binFile) binFile = element
+      else throw new CustomException("Received more than one bin file", 400)
     }
-
-    console.info(`uploading directory ${dirPath}...`)
-
-    const filenames = await readdir(dirPath)
-
-    if (Array.isArray(filenames)) {
-      await Promise.all(
-        filenames.map(async (filename) => {
-          const filepath = `${dirPath}/${filename}`
-          if (!isDir(filepath)) {
-            parameters.Key = join(root, filename)
-            await uploadFile({
-              path: filepath,
-              params: parameters,
-              options: opts,
-            })
-          } else if (isDir(filepath)) {
-            await uploadDirectory({
-              params,
-              options,
-              path: filepath,
-              rootKey: join(root, filename),
-            })
-          }
-        })
-      )
+    if (element.name.split(".")[1] == "gltf") {
+      if (!gltfFile) gltfFile = element
+      else throw new CustomException("Received more than one gltf file", 400)
     }
-  } catch (e) {
-    throw new Error(`unable to upload directory ${path}, ${e.message}`)
-  }
-
-  console.info(`directory ${dirPath} successfully uploaded`)
-  return true
+  })
+  
+  if (!binFile) throw new CustomException("Must send bin file", 400)
+  if (!gltfFile) throw new CustomException("Must send gltf file", 400)
+  return [binFile, gltfFile]
 }
 
-export const uploadModelFiles = async (project_id, model_id, filesToUpload) => {
-  try {
-    console.time("s3 upload")
+export const uploadModelFilesToS3 = async (model_id, files) => {
 
-    await uploadDirectory({
-      path: folderPath, // path to folder to be uploaded, this folder isn't uploaded
-      params: {
-        Bucket: process.env.AWS_BUCKET_NAME,
-      },
-      options: {},
-      rootKey: `${project_id}/${model_id}`, // something like this, can change according to modeling
+  const filesToUpload = filesValidation(files)
+  const parameters = { Bucket: process.env.AWS_BUCKET_NAME }
+  const folderPath = `${model_id}/`
+  await Promise.all(
+    filesToUpload.map(async (file) => {
+      parameters.Key = join(folderPath, file.name)
+      await uploadFile({
+        file,
+        params: parameters
+      })
     })
-
-    console.timeEnd("s3 upload")
-    return binFileUrl // this value should be saved in the model modelUrl attribute
-  } catch (e) {
-    console.error(e)
-  }
+  )
+  return gltfFile // this value should be saved in the model modelUrl attribute
 }
