@@ -20,7 +20,7 @@ const UserModel = (sequelize, type) => {
       allowNull: { args: false, msg: "Full name provided can't be empty" },
       validate: {
         notEmpty: { args: true, msg: "Full name provided can't be empty" },
-        is: { args: /^[a-zA-Z]{2,30}$/, msg: "Full name provided is not valid" },
+        is: { args: /^[a-zA-Z ]{2,30}$/, msg: "Full name provided is not valid" },
       },
     },
     password: {
