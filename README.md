@@ -1,6 +1,7 @@
 # Backend
 
-deploy url: https://backend-production-e56e.up.railway.app/api
+deploy url: https://zmartbuild-api-1brt.onrender.com
+front url: https://main.d2bcutzftlxj73.amplifyapp.com/
 
 ## How to run it in development mode?
 
