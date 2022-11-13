@@ -11,7 +11,7 @@ const s3 = new AWS.S3({
   signatureVersion: "v4",
 })
 
-const uploadFileToS3 = async function uploadFile({ file, params } = {}) {
+const uploadFileToS3 = async ({ file, params } = {}) => {
   const parameters = { ...params }
   try {
     file.name = `${uuidv4()}.${file.name.split(".")[1]}`
