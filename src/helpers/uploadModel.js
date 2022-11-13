@@ -8,7 +8,6 @@ import uploadFileToS3 from "./s3FileUpload"
 // Load environment variables
 config()
 
-
 let gltfFileUrl = ""
 
 const filesValidation = (files) => {
@@ -37,8 +36,7 @@ export const uploadModelFilesToS3 = async (subproject_id, files) => {
   const folderPath = `models/${subproject_id}/`
   await Promise.all(
     filesToUpload.map(async (file) => {
-      
-      const data = parameters.Key = join(folderPath, file.name)
+      const data = (parameters.Key = join(folderPath, file.name))
       await uploadFileToS3({
         file,
         params: parameters,

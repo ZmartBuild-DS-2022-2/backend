@@ -1,7 +1,7 @@
 import AWS from "aws-sdk"
 import { config } from "dotenv"
 import CustomException from "./customeException.js"
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from "uuid"
 
 config()
 
@@ -14,7 +14,7 @@ const s3 = new AWS.S3({
 const uploadFileToS3 = async function uploadFile({ file, params } = {}) {
   const parameters = { ...params }
   try {
-    file.name = `${uuidv4()}.${file.name.split('.')[1]}`
+    file.name = `${uuidv4()}.${file.name.split(".")[1]}`
     parameters.Body = file.data
     parameters.ContentType = file.mimetype
     return await s3.upload(parameters).promise()

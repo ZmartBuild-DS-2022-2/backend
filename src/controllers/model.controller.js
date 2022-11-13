@@ -1,5 +1,5 @@
 import { uploadModelFilesToS3 } from "../helpers/uploadModel.js"
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from "uuid"
 
 const modelUpload = async (req, res) => {
   const { files } = req
