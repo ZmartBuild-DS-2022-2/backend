@@ -1,37 +1,15 @@
 /* eslint-disable no-console */
-import AWS from "aws-sdk"
 import { config } from "dotenv"
 import { join } from "path"
 
 import CustomException from "./customeException.js"
+import uploadFileToS3 from "./s3FileUpload"
 
 // Load environment variables
 config()
 
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  signatureVersion: "v4",
-})
 
 let gltfFileUrl = ""
-
-const uploadFile = async function uploadFile({ file, params } = {}) {
-  const parameters = { ...params }
-  try {
-    parameters.Body = file.data
-    parameters.ContentType = file.mimetype
-    const data = await s3.upload(parameters).promise()
-    if (file.name.split(".")[1] == "gltf") gltfFileUrl = data.Location
-  } catch (e) {
-    throw new CustomException(
-      `unable to upload file ${file.name} at ${parameters.Key}, ${e.message}`,
-      400
-    )
-  }
-
-  return true
-}
 
 const filesValidation = (files) => {
   const filesAsArray = Object.values(files)
@@ -53,17 +31,19 @@ const filesValidation = (files) => {
   return [binFile, gltfFile]
 }
 
-export const uploadModelFilesToS3 = async (model_id, files) => {
+export const uploadModelFilesToS3 = async (subproject_id, files) => {
   const filesToUpload = filesValidation(files)
   const parameters = { Bucket: process.env.AWS_BUCKET_NAME }
-  const folderPath = `${model_id}/`
+  const folderPath = `models/${subproject_id}/`
   await Promise.all(
     filesToUpload.map(async (file) => {
-      parameters.Key = join(folderPath, file.name)
-      await uploadFile({
+      
+      const data = parameters.Key = join(folderPath, file.name)
+      await uploadFileToS3({
         file,
         params: parameters,
       })
+      if (file.name.split(".")[1] == "gltf") gltfFileUrl = data.Location
     })
   )
   return gltfFileUrl
