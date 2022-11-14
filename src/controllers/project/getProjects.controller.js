@@ -1,6 +1,6 @@
 import { User } from "../../config/db.js"
 
-const getAllController = async (req, res) => {
+const getProjectsController = async (req, res) => {
   const userProjects = await User.findByPk(req.currentUser.id, { include: "projects" })
 
   const projects = []
@@ -19,4 +19,4 @@ const getAllController = async (req, res) => {
   return res.status(200).json({ projects: projects })
 }
 
-export default getAllController
+export default getProjectsController

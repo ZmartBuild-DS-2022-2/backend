@@ -1,9 +1,7 @@
 import { Project } from "../../config/db.js"
 
-const getOneController = async (req, res) => {
-  const { id } = req.body
-
-  // PERMISSION MIDDLEWARE
+const getProjectController = async (req, res) => {
+  const id = req.params.projectId
 
   try {
     const project = await Project.findByPk(id)
@@ -14,4 +12,4 @@ const getOneController = async (req, res) => {
   }
 }
 
-export default getOneController
+export default getProjectController

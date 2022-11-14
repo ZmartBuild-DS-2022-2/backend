@@ -1,6 +1,6 @@
 import { Project } from "../../config/db.js"
 
-const createController = async (req, res) => {
+const createProjectController = async (req, res) => {
   const { name, description } = req.body
   if (!name || !description) {
     return res.status(400).send("You must complete all required fields")
@@ -25,4 +25,4 @@ const createController = async (req, res) => {
   }
 }
 
-export default createController
+export default createProjectController
