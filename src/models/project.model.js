@@ -23,7 +23,7 @@ const ProjectModel = (sequelize, type) => {
     },
     location: {
       type: type.STRING,
-      allowNull: true
+      allowNull: true,
     },
     imgLocation: {
       type: type.STRING,
