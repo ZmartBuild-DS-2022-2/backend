@@ -1,6 +1,6 @@
 
 const UserModel = (sequelize, type) => {
-  const User = sequelize.define("user", {
+  return sequelize.define("user", {
     id: {
       type: type.UUID,
       defaultValue: type.UUIDV4,
@@ -40,9 +40,6 @@ const UserModel = (sequelize, type) => {
     },
   })
 
-  // User.belongsToMany(Organization, { through: 'OrganizationPermission'})
-
-  return User
 }
 
 export default UserModel
