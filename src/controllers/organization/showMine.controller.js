@@ -1,23 +1,33 @@
 import { Organization } from "../../config/db.js";
+import { User } from "../../config/db.js"
 
 
 const showMineController = async (req, res) => {
 
     try {
-    const organizations = await Organization.findAll({
-        attributes: ['id', 'name','description']})
 
-    const user = req.currentUser
-    console.log(user)
+    // const userProjects = await User.findByPk(req.currentUser.id, { include: "projects" })
+    const userOrganizations = await User.findByPk(req.currentUser.id, { include: "organizations" })
 
-    // const organizations = []
-    // org.forEach(element => {
-    //     // console.log(element.id)
-    //     organizations.push({id:element.id})
-    // })
-      return res
-        .status(201)
-        .json({ message: "PONG"})
+    const organizations = []
+
+    console.log(userOrganizations)
+    
+
+    userOrganizations.organizations.forEach((item) => {
+        organizations.push({
+          id: item.id,
+          email: item.email,
+          name: item.name,
+          description: item.description
+        })
+      })
+
+
+    return res
+    .status(200)
+    .json({ organizations: organizations})
+
     } 
     catch (err) {
   
