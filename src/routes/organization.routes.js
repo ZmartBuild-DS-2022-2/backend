@@ -17,7 +17,7 @@ router.get("/organization/:id", [verifyToken], showController)
 router.get("/mine", [verifyToken], showMineController)
 
 // router.put("/modify", [verifyToken], modifyController)
-router.delete("/delete/:id", [verifyToken], deleteController)
+router.delete("/:organizationId", [verifyToken], deleteController)
 
 
 export default router

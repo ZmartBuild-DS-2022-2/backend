@@ -1,19 +1,19 @@
+import { Organization } from "../../config/db.js";
 
 const deleteController = async (req, res) => {
+    const id = await req.params.organizationId
 
     try {
-    const organization = await Organization.findOne({
-        attributes: ['id', 'name','description']})
+        await Organization.destroy({ where: { id: id } })
+        return res.sendStatus(200)
 
-
-      return res
-        .status(201)
-        .json({ organization})
-    } 
-    catch (err) {
-  
-      return res.status(400).json(err)
+      } catch (err) {
+        return res.sendStatus(400).json(err)
+        
+      }
     }
-  }
   
   export default deleteController
+
+
+  
