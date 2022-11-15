@@ -3,14 +3,15 @@ import { Organization } from "../../config/db.js";
 
 const showController = async (req, res) => {
 
+  const id = await req.params.organizationId
+
     try {
-    const organization = await Organization.findOne({
-        attributes: ['id', 'name','description']})
+      const organization = await Organization.findByPk(id)
 
 
       return res
         .status(201)
-        .json({ organization})
+        .json({ organization: organization})
     } 
     catch (err) {
   

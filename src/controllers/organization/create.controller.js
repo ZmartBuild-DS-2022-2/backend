@@ -10,15 +10,17 @@ const createController = async (req, res) => {
   const organization = Organization.build(req.body)
   try {
     const user = req.currentUser
-    const newOrganization = await organization.save({ fields: ["email", "name", "description", "websiteUrl", "imgUrl"] })
+    const newOrganization = await organization.save({ fields: 
+      ["email", "name", "description", "websiteUrl", "imgUrl"] })
 
     const xd = await Organization.findByPk(newOrganization.id)
     await user.addOrganization(xd)
     console.log(user)
 
-    const xd2 = await Organization.findByPk(newOrganization.id, {include:[{model:User,as:"users", attributes: ["email"],through: {attributes:[]}}]})
-    console.log(xd2)
-    console.log(xd2.users[0])
+    const xd2 = await Organization.findByPk(newOrganization.id, {include:
+      [{model:User,as:"users", attributes: ["email"],through: {attributes:[]}}]})
+    // console.log(xd2)
+    // console.log(xd2.users[0])
 
 
 
