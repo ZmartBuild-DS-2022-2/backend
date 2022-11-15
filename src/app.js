@@ -24,6 +24,6 @@ app.use(express.urlencoded({ extended: false }))
 // Routes
 app.use("/api/auth", authRoutes)
 app.use("/api/dummy", dummyRoutes)
-app.use("/api/organization", organizationRoutes)
+app.use("/api/organizations", organizationRoutes)
 
 export default app
