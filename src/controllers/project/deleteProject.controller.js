@@ -5,7 +5,7 @@ const deleteProjectController = async (req, res) => {
 
   try {
     await Project.destroy({ where: { id: id } })
-    return res.status(200)
+    return res.sendStatus(200)
   } catch (err) {
     try {
       return res.status(400).send(err.errors[0]?.message)
