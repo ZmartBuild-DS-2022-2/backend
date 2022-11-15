@@ -5,7 +5,7 @@ import {
   getOrganizationController,
   getOrganizationsController,
   updateOrganizationController,
-} from "../controllers/organization"
+} from "../controllers/organization/index.js"
 import { Router } from "express"
 import verifyToken from "../middlewares/auth.js"
 import verifyOrganizationPermission from "../middlewares/organization.js"
