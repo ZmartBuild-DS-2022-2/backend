@@ -1,6 +1,6 @@
-import { Project, User } from "../config/db.js"
+import { Project, User } from "../../config/db.js"
 
-const verifyProjectPermmission = async (req, res, next) => {
+const verifyReadProjectPermmission = async (req, res, next) => {
   const id = req.params.projectId
 
   const userProjects = await User.findByPk(req.currentUser.id, {
@@ -22,7 +22,7 @@ const verifyProjectPermmission = async (req, res, next) => {
   if (permission) {
     return next()
   }
-  return res.sendStatus(401)
+  return res.sendStatus(404)
 }
 
-export default verifyProjectPermmission
+export default verifyReadProjectPermmission
