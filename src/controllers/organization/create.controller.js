@@ -13,8 +13,8 @@ const createController = async (req, res) => {
     const newOrganization = await organization.save({ fields: 
       ["email", "name", "description", "websiteUrl", "imgUrl"] })
 
-    const xd = await Organization.findByPk(newOrganization.id)
-    await user.addOrganization(xd)
+    const org = await Organization.findByPk(newOrganization.id)
+    await user.addOrganization(org)
     console.log(user)
 
     const xd2 = await Organization.findByPk(newOrganization.id, {include:

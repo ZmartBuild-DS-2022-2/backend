@@ -1,5 +1,6 @@
 
 import getOrganizationsController from "../controllers/users/getOrganizations.controller.js"
+
 import verifyToken from "../middlewares/auth.js"
 import { Router } from "express"
 

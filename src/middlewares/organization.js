@@ -14,6 +14,24 @@ const verifyOrganizationPermission = async (req, res, next) => {
     ],
   })
 
+// //PRUEBA
+
+// const prueba = await Organization.findByPk(id, {
+//     include: [
+//       {
+//         model: User,
+//         as: "users",
+//         attributes: ["id"],
+//         through: { attributes: [] },
+//       },
+//     ],
+//   })
+
+//   console.log("WOWSI",prueba.users)
+
+
+
+
   let permission = false
   userOrganizations.organizations.forEach((item) => {
     if (id == item.id) {
