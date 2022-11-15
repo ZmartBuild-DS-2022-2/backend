@@ -2,7 +2,7 @@ import { Organization } from "../../config/db.js";
 import { User } from "../../config/db.js"
 
 
-const showMineController = async (req, res) => {
+const getOrganizationsController = async (req, res) => {
 
     try {
 
@@ -35,4 +35,4 @@ const showMineController = async (req, res) => {
     }
   }
   
-  export default showMineController
+  export default getOrganizationsController

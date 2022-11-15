@@ -6,6 +6,7 @@ import cors from "cors"
 import authRoutes from "./routes/auth.routes.js"
 import dummyRoutes from "./routes/index.js"
 import organizationRoutes from "./routes/organization.routes.js"
+import userRoutes from "./routes/user.routes.js"
 import { PORT, ORIGIN } from "./config/config.js"
 
 const app = express()
@@ -25,5 +26,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use("/api/auth", authRoutes)
 app.use("/api/dummy", dummyRoutes)
 app.use("/api/organizations", organizationRoutes)
+app.use("/api/user", userRoutes)
 
 export default app
