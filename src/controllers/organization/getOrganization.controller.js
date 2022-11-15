@@ -1,7 +1,7 @@
 import { Organization } from "../../config/db.js";
 
 
-const showController = async (req, res) => {
+const getOrganizationController = async (req, res) => {
 
   const id = await req.params.organizationId
 
@@ -19,4 +19,4 @@ const showController = async (req, res) => {
     }
   }
   
-  export default showController
+  export default getOrganizationController

@@ -1,7 +1,7 @@
 import { Organization } from "../../config/db.js";
 
 
-const showAllController = async (req, res) => {
+const getOrganizationsController = async (req, res) => {
 
     try {
     const organizations = await Organization.findAll({
@@ -25,5 +25,5 @@ const showAllController = async (req, res) => {
     }
   }
   
-  export default showAllController
+  export default getOrganizationsController
 

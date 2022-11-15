@@ -1,6 +1,6 @@
 import { Organization } from "../../config/db.js";
 
-const deleteController = async (req, res) => {
+const deleteOrganizationController = async (req, res) => {
     const id = await req.params.organizationId
 
     try {
@@ -13,7 +13,7 @@ const deleteController = async (req, res) => {
       }
     }
   
-  export default deleteController
+  export default deleteOrganizationController
 
 
   

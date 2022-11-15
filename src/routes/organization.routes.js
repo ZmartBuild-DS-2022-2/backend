@@ -1,24 +1,24 @@
 
-import createController from "../controllers/organization/create.controller.js"
-import showAllController from "../controllers/organization/showAll.controller.js"
-import showController from "../controllers/organization/show.controller.js"
-import updateController from "../controllers/organization/update.controller.js"
-import deleteController from "../controllers/organization/delete.controller.js"
-import addUserController from "../controllers/organization/addUser.controller.js"
-
+import createOrganizationController from "../controllers/organization/createOrganization.controller.js"
+import getOrganizationController from "../controllers/organization/getOrganization.controller.js"
+import getOrganizationsController from "../controllers/users/getOrganizations.controller.js"
+import updateOrganizationController from "../controllers/organization/updateOrganization.controller.js"
+import deleteOrganizationController from "../controllers/organization/deleteOrganization.controller.js"
+import addUserOrganizationController from "../controllers/organization/addUserOrganization.controller.js"
 
 
 import verifyToken from "../middlewares/auth.js"
 import verifyOrganizationPermission from "../middlewares/organization.js"
 
 import { Router } from "express"
+
 const router = Router()
 
-router.post("/create",[verifyToken], createController)
-router.get("/",[verifyToken], showAllController )
-router.get("/:organizationId", [verifyToken, verifyOrganizationPermission], showController)
-router.patch("/:organizationId", [verifyToken, verifyOrganizationPermission], updateController)
-router.delete("/:organizationId", [verifyToken, verifyOrganizationPermission], deleteController)
-router.post("/:organizationId/:userId", [verifyToken, verifyOrganizationPermission], addUserController)
+router.post("/create",[verifyToken], createOrganizationController)
+router.get("/",[verifyToken], getOrganizationsController )
+router.get("/:organizationId", [verifyToken, verifyOrganizationPermission], getOrganizationController)
+router.patch("/:organizationId", [verifyToken, verifyOrganizationPermission], updateOrganizationController)
+router.delete("/:organizationId", [verifyToken, verifyOrganizationPermission], deleteOrganizationController)
+router.post("/:organizationId/:userId", [verifyToken, verifyOrganizationPermission], addUserOrganizationController)
 
 export default router

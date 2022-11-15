@@ -1,7 +1,7 @@
 import { Organization, User} from "../../config/db.js"
 
 
-const createController = async (req, res) => {
+const createOrganizationController = async (req, res) => {
   const { email, name, description, websiteUrl, imgUrl} = req.body
   if (!email || !name || !description || !websiteUrl || !imgUrl) {
     return res.status(400).send("You must complete all fields")
@@ -41,4 +41,4 @@ const createController = async (req, res) => {
   }
 }
 
-export default createController
+export default createOrganizationController

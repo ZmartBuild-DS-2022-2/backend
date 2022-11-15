@@ -1,7 +1,7 @@
 import { Organization} from "../../config/db.js"
 
 
-const updateController = async (req, res) => {
+const updateOrganizationController = async (req, res) => {
   const { email, name, description, websiteUrl, imgUrl} = req.body
   const fields = [email, name, description, websiteUrl, imgUrl]
   const allowedFields = ["email", "name", "description", "websiteUrl", "imgUrl"]
@@ -37,4 +37,4 @@ const updateController = async (req, res) => {
   }
 }
 
-export default updateController
+export default updateOrganizationController

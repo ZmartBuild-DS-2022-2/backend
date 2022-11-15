@@ -1,7 +1,7 @@
 import { Organization, User} from "../../config/db.js"
 
 
-const addUserController = async (req, res) => {
+const addUserOrganizationController = async (req, res) => {
     const organizationId = await req.params.organizationId
     const userId = await req.params.userId
 
@@ -26,5 +26,5 @@ const addUserController = async (req, res) => {
   }
 }
 
-export default addUserController
+export default addUserOrganizationController
 
