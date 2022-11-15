@@ -1,29 +1,14 @@
-import { Organization } from "../../config/db.js";
-
+import { Organization } from "../../config/db.js"
 
 const getOrganizationsController = async (req, res) => {
-
-    try {
+  try {
     const organizations = await Organization.findAll({
-        attributes: ['id', 'name','description']})
-
-    const todo = await Organization.findAll()
-
-    // const organizations = []
-    // org.forEach(element => {
-    //     // console.log(element.id)
-    //     organizations.push({id:element.id})
-    // })
-    console.log(todo)
-      return res
-        .status(201)
-        .json({ organizations})
-    } 
-    catch (err) {
-  
-      return res.status(400).json(err)
-    }
+      attributes: ["id", "name", "description"],
+    })
+    return res.status(201).json({ organizations })
+  } catch (err) {
+    return res.status(400).json(err)
   }
-  
-  export default getOrganizationsController
+}
 
+export default getOrganizationsController

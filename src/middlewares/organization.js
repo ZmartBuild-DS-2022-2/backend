@@ -14,29 +14,26 @@ const verifyOrganizationPermission = async (req, res, next) => {
     ],
   })
 
-// //PRUEBA
+  // //PRUEBA
 
-// const prueba = await Organization.findByPk(id, {
-//     include: [
-//       {
-//         model: User,
-//         as: "users",
-//         attributes: ["id"],
-//         through: { attributes: [] },
-//       },
-//     ],
-//   })
+  // const prueba = await Organization.findByPk(id, {
+  //     include: [
+  //       {
+  //         model: User,
+  //         as: "users",
+  //         attributes: ["id"],
+  //         through: { attributes: [] },
+  //       },
+  //     ],
+  //   })
 
-//   console.log("WOWSI",prueba.users)
-
-
-
+  //   console.log("WOWSI",prueba.users)
 
   let permission = false
   userOrganizations.organizations.forEach((item) => {
     if (id == item.id) {
-        permission = true
-    } 
+      permission = true
+    }
   })
 
   if (permission) {

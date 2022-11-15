@@ -1,22 +1,15 @@
-import { Organization } from "../../config/db.js";
-
+import { Organization } from "../../config/db.js"
 
 const getOrganizationController = async (req, res) => {
-
   const id = await req.params.organizationId
 
-    try {
-      const organization = await Organization.findByPk(id)
+  try {
+    const organization = await Organization.findByPk(id)
 
-
-      return res
-        .status(201)
-        .json({ organization: organization})
-    } 
-    catch (err) {
-  
-      return res.status(400).json(err)
-    }
+    return res.status(201).json({ organization: organization })
+  } catch (err) {
+    return res.status(400).json(err)
   }
-  
-  export default getOrganizationController
+}
+
+export default getOrganizationController

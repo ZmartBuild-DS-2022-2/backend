@@ -1,4 +1,3 @@
-
 const UserModel = (sequelize, type) => {
   return sequelize.define("user", {
     id: {
@@ -39,7 +38,6 @@ const UserModel = (sequelize, type) => {
       },
     },
   })
-
 }
 
 export default UserModel

@@ -13,10 +13,8 @@ export const User = UserModel(sequelize, Sequelize)
 export const Organization = OrganizationModel(sequelize, Sequelize)
 
 //Asociaciones
-Organization.belongsToMany(User, { through: 'OrganizationPermission', as: "users" })
-User.belongsToMany(Organization, { through: 'OrganizationPermission', as:"organizations" })
-
-
+Organization.belongsToMany(User, { through: "OrganizationPermission", as: "users" })
+User.belongsToMany(Organization, { through: "OrganizationPermission", as: "organizations" })
 
 sequelize.sync({ force: false }).then(() => {
   // eslint-disable-next-line no-console
