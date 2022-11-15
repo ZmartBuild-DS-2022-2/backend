@@ -5,16 +5,17 @@ import showController from "../controllers/organization/show.controller.js"
 import updateController from "../controllers/organization/update.controller.js"
 import deleteController from "../controllers/organization/delete.controller.js"
 
-// import modifyController from "../controllers/organization/modify.controller.js"
 
 import verifyToken from "../middlewares/auth.js"
+import verifyOrganizationPermission from "../middlewares/organization.js"
+
 import { Router } from "express"
 const router = Router()
 
 router.post("/create",[verifyToken], createController)
 router.get("/",[verifyToken], showAllController )
-router.get("/:organizationId", [verifyToken], showController)
-router.patch("/:organizationId", [verifyToken], updateController)
-router.delete("/:organizationId", [verifyToken], deleteController)
+router.get("/:organizationId", [verifyToken, verifyOrganizationPermission], showController)
+router.patch("/:organizationId", [verifyToken, verifyOrganizationPermission], updateController)
+router.delete("/:organizationId", [verifyToken, verifyOrganizationPermission], deleteController)
 
 export default router
