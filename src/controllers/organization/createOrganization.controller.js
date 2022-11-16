@@ -5,7 +5,7 @@ const createOrganizationController = async (req, res) => {
   if (!name) {
     return res.status(400).send("You must complete all required fields")
   }
-  
+
   const user = req.currentUser
   const organization = Organization.build(req.body)
   try {
