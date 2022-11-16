@@ -2,6 +2,7 @@ import Sequelize from "sequelize"
 import ProjectModel from "../models/project.model.js"
 import ProjectPermissionModel from "../models/projectPermission.model.js"
 import UserModel from "../models/user.model.js"
+import OrganizationModel from "../models/organization.model.js"
 import { DB_USER, DB_NAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_SSL } from "./config.js"
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
@@ -17,8 +18,12 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 export const User = UserModel(sequelize, Sequelize)
 export const Project = ProjectModel(sequelize, Sequelize)
 export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
+export const Organization = OrganizationModel(sequelize, Sequelize)
 
-// ASSOCIATIONS
+//Associations
+User.belongsToMany(Organization, { through: "OrganizationPermission", as: "organizations" })
+Organization.belongsToMany(User, { through: "OrganizationPermission", as: "users" })
+
 User.belongsToMany(Project, { through: ProjectPermission, as: "projects" })
 Project.belongsToMany(User, { through: ProjectPermission, as: "users" })
 
