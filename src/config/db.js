@@ -24,6 +24,9 @@ export const Organization = OrganizationModel(sequelize, Sequelize)
 User.belongsToMany(Organization, { through: "OrganizationPermission", as: "organizations" })
 Organization.belongsToMany(User, { through: "OrganizationPermission", as: "users" })
 
+Organization.hasMany(Project)
+Project.belongsTo(Organization)
+
 User.belongsToMany(Project, { through: ProjectPermission, as: "projects" })
 Project.belongsToMany(User, { through: ProjectPermission, as: "users" })
 
