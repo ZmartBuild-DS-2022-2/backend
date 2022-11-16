@@ -37,8 +37,7 @@ const OrganizationModel = (sequelize, type) => {
         isEmailOrEmpty(val, next) {
           if (!val || val === "" || validateOptionalEmail(val)) {
             return next()
-          }
-          else {
+          } else {
             return next("Email provided is not valid")
           }
         },
