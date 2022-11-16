@@ -2,7 +2,7 @@ import {
   addUserToOrganizationController,
   createOrganizationController,
   deleteOrganizationController,
-  getOrganizationController,
+  getOrganizationByIdController,
   getUserOrganizationsController,
   updateOrganizationController,
 } from "../controllers/organization/index.js"
@@ -17,7 +17,7 @@ router.get("/", [verifyToken], getUserOrganizationsController)
 router.get(
   "/:organizationId",
   [verifyToken, verifyOrganizationPermission],
-  getOrganizationController
+  getOrganizationByIdController
 )
 router.patch(
   "/:organizationId",
