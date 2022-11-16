@@ -9,6 +9,7 @@
     "start": "node src/index.js",
     "format": "prettier --check .",
     "format-write": "prettier --write .",
+    "pf": "prettier --write .",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "prepare": "husky install",
