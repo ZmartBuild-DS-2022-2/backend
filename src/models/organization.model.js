@@ -1,46 +1,39 @@
 const OrganizationModel = (sequelize, type) => {
-  const Organization = sequelize.define("organization", {
+  return sequelize.define("organization", {
     id: {
       type: type.UUID,
       defaultValue: type.UUIDV4,
       allowNull: false,
       primaryKey: true,
     },
-
+    name: {
+      type: type.STRING,
+      allowNull: { args: false, msg: "Organization name can't be empty" },
+      validate: {
+        notEmpty: { args: true, msg: "Organization name can't be empty" },
+      },
+    },
     email: {
       type: type.STRING,
-      allowNull: { args: false, msg: "Email provided can't be empty" },
+      allowNull: true,
       validate: {
-        notEmpty: { args: true, msg: "Email provided can't be empty" },
         isEmail: { args: true, msg: "Email provided is not valid" },
       },
     },
-
-    name: {
-      type: type.STRING,
-      allowNull: { args: false, msg: "Full name provided can't be empty" },
-      validate: {
-        notEmpty: { args: true, msg: "Full name provided can't be empty" },
-      },
-    },
-
     description: {
       type: type.TEXT,
-      allowNull: { args: false, msg: "Description provided can't be empty" },
+      allowNull: true,
       validate: {
-        notEmpty: { args: true, msg: "Description provided can't be empty" },
-        len: { args: [2, 150], msg: "Description can not be longer than 150 characters" },
+        len: { args: [0, 250], msg: "Description can't be longer than 250 characters" },
       },
     },
-
     websiteUrl: {
       type: type.STRING,
       allowNull: true,
       validate: {
-        isUrl: { args: true, msg: "website provided is not valid" },
+        isUrl: { args: true, msg: "Website provided is not valid" },
       },
     },
-
     imgUrl: {
       type: type.STRING,
       allowNull: true,
@@ -49,10 +42,6 @@ const OrganizationModel = (sequelize, type) => {
       },
     },
   })
-
-  // Organization.belongsToMany(User, { through: 'OrganizationPermission' })
-
-  return Organization
 }
 
 export default OrganizationModel
