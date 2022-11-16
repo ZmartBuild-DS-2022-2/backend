@@ -4,6 +4,7 @@ import morgan from "morgan"
 import cors from "cors"
 
 import authRoutes from "./routes/auth.routes.js"
+import modelRoutes from "./routes/model.routes.js"
 import dummyRoutes from "./routes/index.js"
 import organizationRoutes from "./routes/organization.routes.js"
 import userRoutes from "./routes/user.routes.js"
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: false }))
 
 // Routes
 app.use("/api/auth", authRoutes)
+app.use("/api/models", modelRoutes)
 app.use("/api/dummy", dummyRoutes)
 app.use("/api/organizations", organizationRoutes)
 app.use("/api/user", userRoutes)
