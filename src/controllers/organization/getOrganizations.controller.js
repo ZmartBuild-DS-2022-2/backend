@@ -1,4 +1,4 @@
-const getOrganizationsController = async (req, res) => {
+const getUserOrganizationsController = async (req, res) => {
   const { currentUser } = req
 
   try {
@@ -12,4 +12,4 @@ const getOrganizationsController = async (req, res) => {
   }
 }
 
-export default getOrganizationsController
+export default getUserOrganizationsController

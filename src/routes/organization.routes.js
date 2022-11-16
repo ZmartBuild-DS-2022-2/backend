@@ -3,7 +3,7 @@ import {
   createOrganizationController,
   deleteOrganizationController,
   getOrganizationController,
-  getOrganizationsController,
+  getUserOrganizationsController,
   updateOrganizationController,
 } from "../controllers/organization/index.js"
 import { Router } from "express"
@@ -13,7 +13,7 @@ import verifyOrganizationPermission from "../middlewares/organization.js"
 const router = Router()
 
 router.post("/", [verifyToken], createOrganizationController)
-router.get("/", [verifyToken], getOrganizationsController)
+router.get("/", [verifyToken], getUserOrganizationsController)
 router.get(
   "/:organizationId",
   [verifyToken, verifyOrganizationPermission],
