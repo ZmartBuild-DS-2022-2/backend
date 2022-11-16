@@ -1,3 +1,5 @@
+import { validateOptionalEmail } from "./utils/validations.js"
+
 const OrganizationModel = (sequelize, type) => {
   return sequelize.define("organization", {
     id: {
@@ -15,8 +17,9 @@ const OrganizationModel = (sequelize, type) => {
     },
     email: {
       type: type.STRING,
-      allowNull: true,
+      allowNull: false,
       validate: {
+        notEmpty: { args: true, msg: "Email provided can't be empty" },
         isEmail: { args: true, msg: "Email provided is not valid" },
       },
     },
@@ -31,7 +34,14 @@ const OrganizationModel = (sequelize, type) => {
       type: type.STRING,
       allowNull: true,
       validate: {
-        isUrl: { args: true, msg: "Website provided is not valid" },
+        isEmailOrEmpty(val, next) {
+          if (!val || val === "" || validateOptionalEmail(val)) {
+            return next()
+          }
+          else {
+            return next("Email provided is not valid")
+          }
+        },
       },
     },
     imgUrl: {

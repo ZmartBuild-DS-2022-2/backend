@@ -1,13 +1,14 @@
-import { Organization } from "../../config/db.js"
-
 const getOrganizationsController = async (req, res) => {
+  const { currentUser } = req
+
   try {
-    const organizations = await Organization.findAll({
-      attributes: ["id", "name", "description"],
+    const organizations = await currentUser.getOrganizations({
+      attributes: ["id", "name", "email", "description", "websiteUrl", "imgUrl"],
+      joinTableAttributes: [],
     })
-    return res.status(201).json({ organizations })
+    return res.status(201).json(organizations)
   } catch (err) {
-    return res.status(400).json(err)
+    return res.status(400).send(err.errors[0]?.message)
   }
 }
 

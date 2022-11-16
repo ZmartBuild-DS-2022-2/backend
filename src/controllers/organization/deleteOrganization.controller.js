@@ -7,7 +7,7 @@ const deleteOrganizationController = async (req, res) => {
     await Organization.destroy({ where: { id: id } })
     return res.sendStatus(200)
   } catch (err) {
-    return res.sendStatus(400).json(err)
+    return res.status(400).send(err.errors[0]?.message)
   }
 }
 
