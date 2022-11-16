@@ -1,25 +1,24 @@
 import { Organization, User } from "../../config/db.js"
 
-const addUserOrganizationController = async (req, res) => {
-  const organizationId = await req.params.organizationId
-  const userId = await req.params.userId
+const addUserToOrganizationController = async (req, res) => {
+  const { organizationId } = req.params
+  const { userEmail } = req.body
+  if (!userEmail) {
+    return res.status(400).send("You must complete all fields")
+  }
+
+  const addedUser = await User.findOne({ where: { email: userEmail } })
+  if (!addedUser) {
+    return res.status(400).send("There's no user with the given email")
+  }
 
   try {
-    const user = await User.findByPk(userId)
     const organization = await Organization.findByPk(organizationId)
-
-    await user.addOrganization(organization)
-
-    const org = await Organization.findByPk(organization.id, {
-      include: [
-        { model: User, as: "users", attributes: ["id", "email"], through: { attributes: [] } },
-      ],
-    })
-
-    return res.status(201).json({ org })
+    await addedUser.addOrganization(organization)
+    return res.sendStatus(201)
   } catch (err) {
     return res.status(400).send(err.errors[0]?.message)
   }
 }
 
-export default addUserOrganizationController
+export default addUserToOrganizationController

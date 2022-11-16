@@ -1,4 +1,4 @@
-export { default as addUserOrganizationController } from "./addUserOrganization.controller.js"
+export { default as addUserToOrganizationController } from "./addUserOrganization.controller.js"
 export { default as createOrganizationController } from "./createOrganization.controller.js"
 export { default as deleteOrganizationController } from "./deleteOrganization.controller.js"
 export { default as getOrganizationController } from "./getOrganization.controller.js"

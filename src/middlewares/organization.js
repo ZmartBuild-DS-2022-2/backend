@@ -1,8 +1,7 @@
 import { Organization, User } from "../config/db.js"
 
 const verifyOrganizationPermission = async (req, res, next) => {
-  const id = req.params.organizationId
-
+  const { organizationId } = req.params
   const userOrganizations = await User.findByPk(req.currentUser.id, {
     include: [
       {
@@ -10,33 +9,12 @@ const verifyOrganizationPermission = async (req, res, next) => {
         as: "organizations",
         attributes: ["id"],
         through: { attributes: [] },
+        where: { id: organizationId },
       },
     ],
   })
 
-  // //PRUEBA
-
-  // const prueba = await Organization.findByPk(id, {
-  //     include: [
-  //       {
-  //         model: User,
-  //         as: "users",
-  //         attributes: ["id"],
-  //         through: { attributes: [] },
-  //       },
-  //     ],
-  //   })
-
-  //   console.log("WOWSI",prueba.users)
-
-  let permission = false
-  userOrganizations.organizations.forEach((item) => {
-    if (id == item.id) {
-      permission = true
-    }
-  })
-
-  if (permission) {
+  if (userOrganizations) {
     return next()
   }
   return res.sendStatus(401)

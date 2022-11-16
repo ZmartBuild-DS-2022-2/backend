@@ -1,5 +1,5 @@
 import {
-  addUserOrganizationController,
+  addUserToOrganizationController,
   createOrganizationController,
   deleteOrganizationController,
   getOrganizationController,
@@ -30,9 +30,9 @@ router.delete(
   deleteOrganizationController
 )
 router.post(
-  "/:organizationId/:userId",
+  "/:organizationId/user",
   [verifyToken, verifyOrganizationPermission],
-  addUserOrganizationController
+  addUserToOrganizationController
 )
 
 export default router
