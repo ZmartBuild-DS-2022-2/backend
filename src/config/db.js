@@ -12,7 +12,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 export const User = UserModel(sequelize, Sequelize)
 export const Organization = OrganizationModel(sequelize, Sequelize)
 
-//Asociaciones
+//Associations
 Organization.belongsToMany(User, { through: "OrganizationPermission", as: "users" })
 User.belongsToMany(Organization, { through: "OrganizationPermission", as: "organizations" })
 

@@ -12,7 +12,7 @@ import verifyOrganizationPermission from "../middlewares/organization.js"
 
 const router = Router()
 
-router.post("/create", [verifyToken], createOrganizationController)
+router.post("/", [verifyToken], createOrganizationController)
 router.get("/", [verifyToken], getOrganizationsController)
 router.get(
   "/:organizationId",
