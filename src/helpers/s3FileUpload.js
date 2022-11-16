@@ -12,7 +12,11 @@ const s3 = new AWS.S3({
 })
 
 const uploadFileToS3 = async ({ file, params } = {}) => {
-  const parameters = { ...params }
+  // file attribute contains the file object, must have .data and .mimetype
+  // params must contain Key attribute, this contains a string that indicates the path
+  // and file name (+ extension)
+  // example: params = { Key: "images/organizations/:id/main_image/foto.png" }
+  const parameters = { ...params, Bucket: process.env.AWS_BUCKET_NAME }
   try {
     file.name = `${uuidv4()}.${file.name.split(".")[1]}`
     parameters.Body = file.data

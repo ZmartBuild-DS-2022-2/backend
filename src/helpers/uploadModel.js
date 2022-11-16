@@ -32,14 +32,13 @@ const filesValidation = (files) => {
 
 export const uploadModelFilesToS3 = async (subproject_id, files) => {
   const filesToUpload = filesValidation(files)
-  const parameters = { Bucket: process.env.AWS_BUCKET_NAME }
   const folderPath = `models/${subproject_id}/`
   await Promise.all(
     filesToUpload.map(async (file) => {
-      const data = (parameters.Key = join(folderPath, file.name))
-      await uploadFileToS3({
+      const Key = join(folderPath, file.name)
+      const data = await uploadFileToS3({
         file,
-        params: parameters,
+        Key,
       })
       if (file.name.split(".")[1] == "gltf") gltfFileUrl = data.Location
     })
