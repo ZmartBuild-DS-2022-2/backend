@@ -13,7 +13,7 @@ const createOrganizationController = async (req, res) => {
       fields: ["name", "email", "description", "websiteUrl", "imgUrl"],
     })
     newOrganization = await Organization.findByPk(newOrganization.id)
-    await user.addOrganization(newOrganization)
+    await user.addUserOrganization(newOrganization)
 
     return res.status(201).json({
       id: newOrganization.id,

@@ -14,7 +14,7 @@ const addUserToOrganizationController = async (req, res) => {
 
   try {
     const organization = await Organization.findByPk(organizationId)
-    await addedUser.addOrganization(organization)
+    await addedUser.addUserOrganization(organization)
     return res.sendStatus(201)
   } catch (err) {
     return res.status(400).send(err.errors[0]?.message)

@@ -13,7 +13,7 @@ const createProjectController = async (req, res) => {
   try {
     const newProject = await project.save({ fields: ["name", "description", "imgUrl"] })
     await organization.addProject(newProject)
-    await user.addProject(newProject, { through: { role: "a" } })
+    await user.addUserProject(newProject, { through: { role: "a" } })
 
     return res.status(201).json({
       id: newProject.id,
