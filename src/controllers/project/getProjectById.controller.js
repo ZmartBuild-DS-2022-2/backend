@@ -14,7 +14,7 @@ const getProjectByIdController = async (req, res) => {
         {
           model: ProjectImage,
           attributes: { exclude: ["createdAt", "updatedAt"] },
-        }
+        },
       ],
     })
     return res.status(200).json(project)
