@@ -1,5 +1,3 @@
-import { validateOptionalUrl } from "./utils/validations.js"
-
 const ProjectModel = (sequelize, type) => {
   return sequelize.define("project", {
     id: {
@@ -21,25 +19,6 @@ const ProjectModel = (sequelize, type) => {
       allowNull: true,
       validate: {
         len: { args: [0, 250], msg: "Description can't be longer than 250 characters" },
-      },
-    },
-    imgsUrls: {
-      type: type.STRING(1000),
-      allowNull: true,
-      validate: {
-        isUrlOrEmpty(val, next) {
-          if (!val || val === "") {
-            return next()
-          } else {
-            const values = val.split(";")
-            values.forEach((element) => {
-              if (!validateOptionalUrl(element)) {
-                return next(`--  ${element} -- value provided is not a valid URL`)
-              }
-            })
-            return next()
-          }
-        },
       },
     },
   })

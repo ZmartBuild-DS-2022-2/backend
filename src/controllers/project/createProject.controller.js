@@ -1,4 +1,4 @@
-import { Organization, Project } from "../../config/db.js"
+import { Organization, Project, ProjectImage } from "../../config/db.js"
 import uploadFileToS3 from "../../helpers/s3FileUpload.js"
 
 const createProjectController = async (req, res) => {
@@ -7,40 +7,41 @@ const createProjectController = async (req, res) => {
   if (!name) {
     return res.status(400).send("You must complete all required fields")
   }
-  let images
-  if (req.files) images = Object.values(req.files)
+
+  const { images: imagesFiles } = req.files
   const user = req.currentUser
   const organization = await Organization.findByPk(organizationId)
-  req.body.imgsUrls = ""
   const project = Project.build(req.body)
+
   try {
-    const newProject = await project.save({ fields: ["name", "description", "imgsUrls"] })
+    const newProject = await project.save({ fields: ["name", "description"] })
     await organization.addProject(newProject)
     await user.addUserProject(newProject, { through: { role: "a" } })
 
-    let imgsUrls = ""
     try {
-      if (images) {
-        imgsUrls = []
+      if (imagesFiles) {
         await Promise.all(
-          images.map(async (image) => {
-            const params = { Key: `images/projects/${newProject.id}/${image.name}` }
-            imgsUrls.push(await uploadFileToS3(image, params))
+          imagesFiles.map(async (imageFile) => {
+            const uploadParams = { Key: `images/projects/${newProject.id}/${imageFile.name}` }
+            const imgUrl = await uploadFileToS3(imageFile, uploadParams)
+            const image = ProjectImage.build({ url: imgUrl })
+            const newProjectImage = await image.save({ fields: ["url"] })
+            await newProject.addProjectImage(newProjectImage)
           })
         )
-        imgsUrls = imgsUrls.join(";")
-        await Project.update({ imgsUrls }, { where: { id: newProject.id } })
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
+    } catch (err) {
+      try {
+        return res.status(400).send(err.errors[0]?.message)
+      } catch {
+        return res.status(400).send("Something went wrong")
+      }
     }
 
     return res.status(201).json({
       id: newProject.id,
       name: newProject.name,
       description: newProject.description,
-      imgsUrls: imgsUrls,
     })
   } catch (err) {
     try {
