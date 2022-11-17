@@ -6,13 +6,12 @@ import {
 } from "../controllers/organization/index.js"
 import createProjectController from "../controllers/project/createProject.controller.js"
 import { Router } from "express"
-import fileupload from "express-fileupload"
 import verifyToken from "../middlewares/auth.js"
 import verifyOrganizationPermission from "../middlewares/organization.js"
 
 const router = Router()
 
-router.post("/", [verifyToken], fileupload(), createOrganizationController)
+router.post("/", [verifyToken], createOrganizationController)
 router.get("/", [verifyToken], getUserOrganizationsController)
 
 router.get(
