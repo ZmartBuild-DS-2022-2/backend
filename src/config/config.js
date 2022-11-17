@@ -12,3 +12,10 @@ export const DB_NAME = process.env.DB_NAME || ""
 export const DB_PASSWORD = process.env.DB_PASSWORD || ""
 export const DB_HOST = process.env.DB_HOST || "localhost"
 export const DB_PORT = process.env.DB_PORT || 5432
+export const DB_SSL = process.env.DB_SSL == "true"
+export const DB_FORCE_RESTART = process.env.DB_FORCE_RESTART == "true"
+
+// AWS S3 Bucket variables
+export const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME || ""
+export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || ""
+export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || ""
