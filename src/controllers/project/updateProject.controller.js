@@ -3,7 +3,7 @@ import { Project } from "../../config/db.js"
 const updateProjectController = async (req, res) => {
   const { name, description, location, imgLocation } = req.body
   const fields = [name, description, location, imgLocation]
-  const allowedFields = ["name", "description", "location", "imgLocation"]
+  const allowedFields = ["name", "description", "location", "imgsUrls"]
   const id = req.params.projectId
 
   let updater = {}

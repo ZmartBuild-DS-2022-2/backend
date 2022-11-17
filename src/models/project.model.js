@@ -23,15 +23,21 @@ const ProjectModel = (sequelize, type) => {
         len: { args: [0, 250], msg: "Description can't be longer than 250 characters" },
       },
     },
-    imgUrl: {
-      type: type.STRING,
+    imgsUrls: {
+      type: type.STRING(1000),
       allowNull: true,
       validate: {
         isUrlOrEmpty(val, next) {
-          if (!val || val === "" || validateOptionalUrl(val)) {
+          if (!val || val === "") {
             return next()
           } else {
-            return next("URL provided is not valid")
+            const values = val.split(";")
+            values.forEach((element) => {
+              if (!validateOptionalUrl(element)) {
+                return next(`--  ${element} -- value provided is not a valid URL`)
+              }
+            })
+            return next()
           }
         },
       },

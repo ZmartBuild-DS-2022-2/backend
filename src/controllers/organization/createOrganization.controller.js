@@ -9,11 +9,10 @@ const createOrganizationController = async (req, res) => {
   let image
   if (req.files) image = req.files.image
   const user = req.currentUser
-  req.body.imgUrl = ""
   const organization = Organization.build(req.body)
   try {
     let newOrganization = await organization.save({
-      fields: ["name", "email", "description", "websiteUrl", "imgUrl"],
+      fields: ["name", "email", "description", "websiteUrl"],
     })
     newOrganization = await Organization.findByPk(newOrganization.id)
     await user.addUserOrganization(newOrganization)

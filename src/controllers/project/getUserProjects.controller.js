@@ -1,11 +1,12 @@
 import { Organization } from "../../config/db.js"
+import getImagesUrl from "../../helpers/getImagesUrls.js"
 
 const getUserProjectsController = async (req, res) => {
   const { currentUser } = req
   const { organizationId } = req.query
   try {
     const projects = await currentUser.getUserProjects({
-      attributes: ["id", "name", "description", "imgUrl"],
+      attributes: ["id", "name", "description", "imgsUrls"],
       joinTableAttributes: [],
       include: [
         {
@@ -15,9 +16,16 @@ const getUserProjectsController = async (req, res) => {
         },
       ],
     })
+    projects.forEach((project) => {
+      project.imgsUrls = getImagesUrl(project.imgsUrls)
+    })
     return res.status(200).json(projects)
   } catch (err) {
-    return res.status(400).send(err.errors[0]?.message)
+    try {
+      return res.status(400).send(err.errors[0]?.message)
+    } catch (err) {
+      return res.status(400).send(err.message)
+    }
   }
 }
 
