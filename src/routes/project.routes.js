@@ -7,11 +7,7 @@ import verifyWriteProjectPermmission from "../middlewares/project/writeProject.j
 import verifyAdminProjectPermmission from "../middlewares/project/adminProject.js"
 import verifyToken from "../middlewares/auth.js"
 import { Router } from "express"
-
-import {
-  createProjectController,
-  getUserProjectsController
-} from "../controllers/project/index.js"
+import { createProjectController, getUserProjectsController } from "../controllers/project/index.js"
 
 const router = Router()
 
