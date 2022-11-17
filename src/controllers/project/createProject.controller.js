@@ -12,7 +12,7 @@ const createProjectController = async (req, res) => {
   const user = req.currentUser
   const organization = await Organization.findByPk(organizationId)
   const project = Project.build(req.body)
-  
+
   try {
     const newProject = await project.save({ fields: ["name", "description"] })
     await organization.addProject(newProject)
