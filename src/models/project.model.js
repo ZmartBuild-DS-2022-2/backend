@@ -1,3 +1,5 @@
+import { validateOptionalUrl } from "./utils/validations.js"
+
 const ProjectModel = (sequelize, type) => {
   return sequelize.define("project", {
     id: {
@@ -25,7 +27,13 @@ const ProjectModel = (sequelize, type) => {
       type: type.STRING,
       allowNull: true,
       validate: {
-        isUrl: { args: true, msg: "URL provided is not valid" },
+        isUrlOrEmpty(val, next) {
+          if (!val || val === "" || validateOptionalUrl(val)) {
+            return next()
+          } else {
+            return next("URL provided is not valid")
+          }
+        },
       },
     },
   })
