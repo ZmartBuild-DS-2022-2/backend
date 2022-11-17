@@ -45,8 +45,8 @@ const createProjectController = async (req, res) => {
   } catch (err) {
     try {
       return res.status(400).send(err.errors[0]?.message)
-    } catch (err) {
-      return res.status(400).send(err.message)
+    } catch {
+      return res.status(400).send("Something went wrong")
     }
   }
 }

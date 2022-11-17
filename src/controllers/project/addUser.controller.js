@@ -21,7 +21,7 @@ const addUserController = async (req, res) => {
     try {
       return res.status(400).send(err.errors[0]?.message)
     } catch {
-      return res.status(400).send(err.message)
+      return res.status(400).send("Something went wrong")
     }
   }
 }
