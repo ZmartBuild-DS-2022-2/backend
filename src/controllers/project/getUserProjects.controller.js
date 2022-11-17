@@ -4,7 +4,7 @@ const getUserProjectsController = async (req, res) => {
   const { currentUser } = req
   const { organizationId } = req.query
   try {
-    const projects = await currentUser.getProjects({
+    const projects = await currentUser.getUserProjects({
       attributes: ["id", "name", "description", "imgUrl"],
       joinTableAttributes: [],
       include: [
