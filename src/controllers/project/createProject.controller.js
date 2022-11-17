@@ -1,24 +1,23 @@
-import { Project } from "../../config/db.js"
+import { Organization, Project } from "../../config/db.js"
 
 const createProjectController = async (req, res) => {
-  const { name, description } = req.body
-  if (!name || !description) {
+  const { organizationId } = req.params
+  const { name } = req.body
+  if (!name) {
     return res.status(400).send("You must complete all required fields")
   }
 
+  const organization = await Organization.findByPk(organizationId)
   const project = Project.build(req.body)
   try {
-    const newProject = await project.save({
-      fields: ["name", "description", "location", "imgLocation"],
-    })
-    await req.currentUser.addProject(newProject, { through: { role: "a" } })
+    const newProject = await project.save({ fields: ["name", "description", "imgUrl"] })
+    await organization.addProject(newProject)
 
     return res.status(201).json({
       id: newProject.id,
       name: newProject.name,
       description: newProject.description,
-      location: newProject.location,
-      imgLocation: newProject.imgLocation,
+      imgUrl: newProject.imgLocation,
     })
   } catch (err) {
     return res.status(400).send(err.errors[0]?.message)

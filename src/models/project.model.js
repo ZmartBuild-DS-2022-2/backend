@@ -8,28 +8,24 @@ const ProjectModel = (sequelize, type) => {
     },
     name: {
       type: type.STRING,
-      allowNull: { args: false, msg: "Name provided can't be empty" },
+      allowNull: { args: false, msg: "Project name can't be empty" },
       validate: {
-        notEmpty: { args: true, msg: "Name provided can't be empty" },
-        len: { args: /^\w{2,30}$/, msg: "Name cannot be longer than 30 characters" },
+        notEmpty: { args: true, msg: "Project name can't be empty" },
+        len: { args: [2, 30], msg: "Project name can't be longer than 30 characters" },
       },
     },
     description: {
       type: type.STRING,
       allowNull: true,
       validate: {
-        len: { args: /^\w{2,150}$/, msg: "Description cannot be longer than 150 characters" },
+        len: { args: [0, 250], msg: "Description can't be longer than 250 characters" },
       },
     },
-    location: {
-      type: type.STRING,
-      allowNull: true,
-    },
-    imgLocation: {
+    imgUrl: {
       type: type.STRING,
       allowNull: true,
       validate: {
-        isUrl: { args: true, msg: "Url provided is not valid" },
+        isUrl: { args: true, msg: "URL provided is not valid" },
       },
     },
   })
