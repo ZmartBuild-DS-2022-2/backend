@@ -6,7 +6,7 @@ const getOrganizationByIdController = async (req, res) => {
     let organization = await Organization.findByPk(organizationId, {
       attributes: ["id", "name", "email", "description", "websiteUrl", "imgUrl"],
     })
-    return res.status(201).json(organization)
+    return res.status(200).json(organization)
   } catch (err) {
     return res.status(400).send(err.errors[0]?.message)
   }
