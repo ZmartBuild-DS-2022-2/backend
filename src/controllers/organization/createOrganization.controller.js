@@ -6,8 +6,8 @@ const createOrganizationController = async (req, res) => {
   if (!name) {
     return res.status(400).send("You must complete all required fields")
   }
-
-  const { image } = req.files
+  let image
+  if (req.files) image = req.files.image
   const user = req.currentUser
   req.body.imgUrl = ""
   const organization = Organization.build(req.body)
