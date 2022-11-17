@@ -51,9 +51,6 @@ const OrganizationModel = (sequelize, type) => {
     imgUrl: {
       type: type.STRING,
       allowNull: true,
-      validate: {
-        isUrl: { args: true, msg: "Image provided is not valid" },
-      },
     },
   })
 }
