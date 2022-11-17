@@ -8,7 +8,11 @@ const getUserOrganizationsController = async (req, res) => {
     })
     return res.status(200).json(organizations)
   } catch (err) {
-    return res.status(400).send(err.errors[0]?.message)
+    try {
+      return res.status(400).send(err.errors[0]?.message)
+    } catch {
+      return res.status(400).send("Something went wrong")
+    }
   }
 }
 
