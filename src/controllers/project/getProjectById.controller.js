@@ -1,13 +1,22 @@
-import { Project } from "../../config/db.js"
-import getImagesUrl from "../../helpers/getImagesUrls.js"
+import { Organization, Project, ProjectImage } from "../../config/db.js"
 
 const getProjectByIdController = async (req, res) => {
   const { projectId } = req.params
   try {
     const project = await Project.findByPk(projectId, {
       attributes: ["id", "name", "description"],
+      joinTableAttributes: [],
+      include: [
+        {
+          model: Organization,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        },
+        {
+          model: ProjectImage,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        }
+      ],
     })
-    project.imgsUrls = getImagesUrl(project.imgsUrls)
     return res.status(200).json(project)
   } catch (err) {
     try {
