@@ -27,8 +27,8 @@ Organization.belongsToMany(User, { through: "OrganizationPermission", as: "users
 Organization.hasMany(Project)
 Project.belongsTo(Organization)
 
-User.belongsToMany(Project, { through: ProjectPermission, as: "projects" })
-Project.belongsToMany(User, { through: ProjectPermission, as: "users" })
+User.belongsToMany(Project, { through: ProjectPermission, as: "userProjects" })
+Project.belongsToMany(User, { through: ProjectPermission, as: "projectUsers" })
 
 sequelize.sync({ force: false }).then(() => {
   // eslint-disable-next-line no-console
