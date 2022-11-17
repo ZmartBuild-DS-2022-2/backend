@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser"
 import express from "express"
 import morgan from "morgan"
 import cors from "cors"
+import fileupload from "express-fileupload"
 
 import authRoutes from "./routes/auth.routes.js"
 import modelRoutes from "./routes/model.routes.js"
@@ -23,6 +24,7 @@ app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
+app.use(fileupload())
 
 // Routes
 app.use("/api/auth", authRoutes)
