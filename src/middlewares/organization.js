@@ -8,7 +8,7 @@ const verifyOrganizationPermission = async (req, res, next) => {
       include: [
         {
           model: Organization,
-          as: "organizations",
+          as: "userOrganizations",
           attributes: ["id"],
           through: { attributes: [] },
           where: { id: organizationId },

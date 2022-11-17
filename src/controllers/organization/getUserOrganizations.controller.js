@@ -2,7 +2,7 @@ const getUserOrganizationsController = async (req, res) => {
   const { currentUser } = req
 
   try {
-    const organizations = await currentUser.getOrganizations({
+    const organizations = await currentUser.getUserOrganizations({
       attributes: ["id", "name", "email", "description", "websiteUrl", "imgUrl"],
       joinTableAttributes: [],
     })
