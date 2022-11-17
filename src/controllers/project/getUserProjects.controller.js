@@ -3,7 +3,6 @@ import { Organization } from "../../config/db.js"
 const getUserProjectsController = async (req, res) => {
   const { currentUser } = req
   const { organizationId } = req.query
-
   try {
     const projects = await currentUser.getProjects({
       attributes: ["id", "name", "description", "imgUrl"],
@@ -12,7 +11,7 @@ const getUserProjectsController = async (req, res) => {
         {
           model: Organization,
           where: organizationId ? { id: organizationId } : {},
-          attributes: { exclude: ["createdAt", "updatedAt"] }
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         },
       ],
     })
