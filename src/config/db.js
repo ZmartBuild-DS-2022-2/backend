@@ -6,7 +6,15 @@ import {
   ProjectPermissionModel,
   ProjectImageModel,
 } from "../models/index.js"
-import { DB_USER, DB_NAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_SSL } from "./config.js"
+import {
+  DB_USER,
+  DB_NAME,
+  DB_PASSWORD,
+  DB_HOST,
+  DB_PORT,
+  DB_SSL,
+  DB_FORCE_RESTART,
+} from "./config.js"
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
@@ -37,7 +45,7 @@ Project.belongsToMany(User, { through: ProjectPermission, as: "projectUsers" })
 Project.hasMany(ProjectImage)
 ProjectImage.belongsTo(Project)
 
-sequelize.sync({ force: false }).then(() => {
+sequelize.sync({ force: DB_FORCE_RESTART }).then(() => {
   // eslint-disable-next-line no-console
   console.log("SERVER (DB): Database synchronized succesfully")
 })
