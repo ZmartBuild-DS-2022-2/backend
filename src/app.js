@@ -10,16 +10,16 @@ import dummyRoutes from "./routes/index.js"
 import projectRoutes from "./routes/project.routes.js"
 import organizationRoutes from "./routes/organization.routes.js"
 import userRoutes from "./routes/user.routes.js"
-import { PORT, ORIGIN } from "./config/config.js"
+import config from "./config/config.js"
 
 const app = express()
 
 // Settings
-app.set("port", PORT)
+app.set("port", config.PORT)
 app.set("json spaces", 4)
 
 // Extra settings and utils middlewares
-app.use(cors({ origin: ORIGIN, credentials: true }))
+app.use(cors({ origin: config.ORIGIN, credentials: true }))
 app.use(morgan("dev"))
 app.use(express.json())
 app.use(cookieParser())

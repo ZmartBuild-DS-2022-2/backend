@@ -1,5 +1,5 @@
 import jsonwebtoken from "jsonwebtoken"
-import { JWT_SECRET } from "../config/config.js"
+import config from "../config/config.js"
 import { User } from "../config/db.js"
 
 const verifyToken = async (req, res, next) => {
@@ -9,7 +9,7 @@ const verifyToken = async (req, res, next) => {
   }
 
   try {
-    const { id, email } = jsonwebtoken.verify(access_token, JWT_SECRET)
+    const { id, email } = jsonwebtoken.verify(access_token, config.JWT_SECRET)
     const currentUser = await User.findOne({ where: { id, email } })
     if (!currentUser) {
       return res.sendStatus(401)
