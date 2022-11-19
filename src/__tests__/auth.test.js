@@ -14,7 +14,6 @@ describe("Auth API routes", () => {
     testServer.close(done)
   })
 
-  
   const userData = {
     email: "janedoe@gmail.com",
     fullname: "Jane",
@@ -26,10 +25,8 @@ describe("Auth API routes", () => {
 
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
 
-  
   //  1- REGISTRO
   describe("POST /api/auth/register", () => {
-
     //  1a-CUANDO CREDENCIALES SON VÁLIDAS
     describe("When user credentials are valid", () => {
       beforeAll(async () => {
@@ -57,41 +54,29 @@ describe("Auth API routes", () => {
         expect(response.status).toBe(400)
       })
     })
-
   })
-    
-  
+
   //  2- LOGIN
   describe("POST /api/auth/login", () => {
-
     const loginAuth = (body) => request(app).post("/api/auth/login").send(body)
 
-      beforeAll(async () => {
-        await createAuth({ email, fullname, lastName, password })
-      })
-
-      test('when password is correct, responds with unauthorized false', async () => {
-        response = await loginAuth({ email, password})
-        console.log("YAY?",response)
-        expect(response.unauthorized).toBe(false)
-      })
-
-
-      test('when password is incorrect, responds with unauthorized true', async () => {
-        response = await loginAuth({ email, password: 'otherpassword' })
-        console.log("YAY?",response)
-        expect(response.unauthorized).toBe(true)
-      })
-
-
-      test('when email is not registered, responds with 401 status code', async () => {
-        response = await loginAuth({ email: 'unregistered@gmail.com', password })
-        expect(response.status).toBe(401)
-      })
-
+    beforeAll(async () => {
+      await createAuth({ email, fullname, lastName, password })
     })
 
+    test("when password is correct, responds with unauthorized false", async () => {
+      response = await loginAuth({ email, password })
+      expect(response.unauthorized).toBe(false)
+    })
 
+    test("when password is incorrect, responds with unauthorized true", async () => {
+      response = await loginAuth({ email, password: "otherpassword" })
+      expect(response.unauthorized).toBe(true)
+    })
 
-  
+    test("when email is not registered, responds with 401 status code", async () => {
+      response = await loginAuth({ email: "unregistered@gmail.com", password })
+      expect(response.status).toBe(401)
+    })
+  })
 })
