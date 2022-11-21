@@ -67,6 +67,7 @@ describe("Auth API routes", () => {
     test("when password is correct, responds with unauthorized false", async () => {
       response = await loginAuth({ email, password })
       expect(response.unauthorized).toBe(false)
+      console.log(response)
     })
 
     test("when password is incorrect, responds with unauthorized true", async () => {

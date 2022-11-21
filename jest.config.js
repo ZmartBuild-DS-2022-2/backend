@@ -1,1 +1,1 @@
-export default { transform: {}, testTimeout: 30000 }
+export default { transform: {}, testTimeout: 40000 }
