@@ -61,7 +61,6 @@ describe("Organization API routes", () => {
     const addUserToOrganization = (body, orgId, accessToken) =>
       request(app).post(`/api/organizations/${orgId}/user`).send(body).set("Cookie", accessToken)
 
-
     // SE REGISTRA AL USUARIO
     beforeAll(async () => {
       await createAuth(userData)
@@ -131,23 +130,20 @@ describe("Organization API routes", () => {
         expect(response.status).toBe(401)
       })
 
-      describe('Invite user to organization', () => {
+      describe("Invite user to organization", () => {
         beforeAll(async () => {
-          const {email} = userData2
-            //Token 2  debiera ver la organización del token 1 porque fue invitado por éste
-            //token 1 invita a token 2
-           await addUserToOrganization({userEmail: email}, organizationId, token)
-            })
-
-        test('Should see the organization created from another user when is \
-        invited to participate in', async () => {
-
-            //ahora vemos si puede acceder a la misma ruta que no podía en el test anterior
-            response = await getOrganizationById(organizationId, token2)
-            expect(response.status).toBe(200)
-
+          const { email } = userData2
+          //Token 2  debiera ver la organización del token 1 porque fue invitado por éste
+          //token 1 invita a token 2
+          await addUserToOrganization({ userEmail: email }, organizationId, token)
         })
 
+        test("Should see the organization created from another user when is \
+        invited to participate in", async () => {
+          //ahora vemos si puede acceder a la misma ruta que no podía en el test anterior
+          response = await getOrganizationById(organizationId, token2)
+          expect(response.status).toBe(200)
+        })
       })
     })
 
