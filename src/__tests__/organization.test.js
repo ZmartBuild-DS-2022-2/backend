@@ -57,9 +57,10 @@ describe("Organization API routes", () => {
 
     const getOrganizationById = (id, accessToken) =>
       request(app).get(`/api/organizations/${id}`).set("Cookie", accessToken)
-    
-    // const addUserToOrganization = (orgId, emailUser, accessToken) =>
-    //   request(app).post(`/api/organizations/${orgId}/${emailUser}`).set("Cookie", accessToken)
+
+    const addUserToOrganization = (body, orgId, accessToken) =>
+      request(app).post(`/api/organizations/${orgId}/user`).send(body).set("Cookie", accessToken)
+
 
     // SE REGISTRA AL USUARIO
     beforeAll(async () => {
@@ -75,11 +76,6 @@ describe("Organization API routes", () => {
       it("should return a 401 status code", () => {
         expect(response.status).toBe(401)
       })
-
-      // it('should not have created an organization', async () => {
-      //     const organizationCount = await app.context.orm.organization.count()
-      //     expect(organizationCount).toBe(1)
-      // })
 
       it("should not have permission to create organization, \
             expect unauthorized true", async () => {
@@ -113,68 +109,53 @@ describe("Organization API routes", () => {
         response = await getOrganizationById(organizationId, token)
         expect(response.body).toMatchObject(organizationData)
       })
+    })
 
-})
+    describe("When involves another user authorization", () => {
+      beforeAll(async () => {
+        //como ya tenemos la información de usuario 1: token y organizationId
+        //Crearemos el segundo usuario y haremos log in
 
+        const { email, password } = userData2
 
-        describe('When involves another user authorization', () => {
-            beforeAll(async () => {
-            //como ya tenemos la información de usuario 1: token y organizationId
-            //Crearemos el segundo usuario y haremos log in
+        await createAuth(userData2)
+        const login_response2 = await loginAuth({ email, password })
+        // user2Id = login_response2.body.id
+        token2 = await login_response2.get("set-cookie")[0]
+      })
 
-            const { email, password } = userData2
-            
-            await createAuth(userData2)
-            const login_response2 = await loginAuth( { email, password } )
-            // user2Id = login_response2.body.id
-            token2 = await login_response2.get("set-cookie")[0]
+      test("Should not see the organization created from another user", async () => {
+        //User 2-Token 2 no debiera ver la organización
+        //del user 1 - token 1 sin autorización
+        response = await getOrganizationById(organizationId, token2)
+        expect(response.status).toBe(401)
+      })
 
-              })
-    
-
-            test('Should not see the organization created from another user', async () => {
-                //User 2-Token 2 no debiera ver la organización 
-                //del user 1 - token 1 sin autorización
-                response = await getOrganizationById(organizationId, token2)
-                expect(response.status).toBe(401)
+      describe('Invite user to organization', () => {
+        beforeAll(async () => {
+          const {email} = userData2
+            //Token 2  debiera ver la organización del token 1 porque fue invitado por éste
+            //token 1 invita a token 2
+           await addUserToOrganization({userEmail: email}, organizationId, token)
             })
 
-            // describe('Invite user to organization', () => {
-            //   beforeAll(async () => {
-            //     const {email} = userData2
-            //      await addUserToOrganization(organizationId, email, token)    
-            //       })
+        test('Should see the organization created from another user when is \
+        invited to participate in', async () => {
 
-            //   test('Should see the organization created from another user when is \
-            //   invited to participate in', async () => {
-            //       //Token 2  debiera ver la organización del token 1 porque fue invitado por éste
-            //       //token 1 invita a token 2
-            //       //ahora vemos si puede acceder a la misma ruta que no podía en el test anterior
-            //       response = await getOrganizationById(organizationId, token2)
-            //       expect(response.status).toBe(200)
-                  
-            //   })
-
-
-            // })
-            
+            //ahora vemos si puede acceder a la misma ruta que no podía en el test anterior
+            response = await getOrganizationById(organizationId, token2)
+            expect(response.status).toBe(200)
 
         })
 
-                
-        
-        // organizationId = await authCreateOrganization(organizationData, token).body.id
-                // console.log(organizationId)
-                //.get("set-cookie")[0]
-                
-                // crear organiz = await authCreateOrganization(organizationData, token)
-                // organizationId = await response.body.id
+      })
+    })
 
+    // organizationId = await authCreateOrganization(organizationData, token).body.id
+    // console.log(organizationId)
+    //.get("set-cookie")[0]
 
-
-
-
-
-
+    // crear organiz = await authCreateOrganization(organizationData, token)
+    // organizationId = await response.body.id
   })
 })

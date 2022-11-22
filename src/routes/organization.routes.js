@@ -1,6 +1,7 @@
 import {
   addUserToOrganizationController,
   createOrganizationController,
+  deleteOrganizationController,
   getOrganizationByIdController,
   getUserOrganizationsController,
 } from "../controllers/organization/index.js"
@@ -18,6 +19,12 @@ router.get(
   "/:organizationId",
   [verifyToken, verifyOrganizationPermission],
   getOrganizationByIdController
+)
+
+router.delete(
+  "/:organizationId",
+  [verifyToken, verifyOrganizationPermission],
+  deleteOrganizationController
 )
 
 router.post(
