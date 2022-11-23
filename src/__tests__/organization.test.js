@@ -146,12 +146,5 @@ describe("Organization API routes", () => {
         })
       })
     })
-
-    // organizationId = await authCreateOrganization(organizationData, token).body.id
-    // console.log(organizationId)
-    //.get("set-cookie")[0]
-
-    // crear organiz = await authCreateOrganization(organizationData, token)
-    // organizationId = await response.body.id
   })
 })
