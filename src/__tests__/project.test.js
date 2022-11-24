@@ -63,21 +63,18 @@ describe("Project API routes", () => {
     const getProjectById = (projectId, accessToken) =>
       request(app).get(`/api/projects/${projectId}`).set("Cookie", accessToken)
 
-
     const deleteProject = (projectId, accessToken) =>
-    request(app).delete(`/api/projects/${projectId}`).set("Cookie", accessToken)
-    
-
+      request(app).delete(`/api/projects/${projectId}`).set("Cookie", accessToken)
 
     const projectData = {
       name: "proyecto",
       description: "descripcion_proyecto",
     }
 
-      const projectData2 = {
-        name: "proyecto2",
-        description: "descripcion_proyecto2"
-      }
+    const projectData2 = {
+      name: "proyecto2",
+      description: "descripcion_proyecto2",
+    }
 
     beforeAll(async () => {
       //create and login user
@@ -97,7 +94,6 @@ describe("Project API routes", () => {
 
     test("Should be able to create project, expect 201 status code", async () => {
       expect(response.status).toBe(201)
-      
     })
     //userProjects.projectPermission
 
@@ -119,20 +115,16 @@ describe("Project API routes", () => {
       expect(response.status).toBe(200)
     })
 
-    test('should delete project ', async () => {
-    //creamos otro projecto, si los contamos serían 2
-    const project2 = await authCreateProject(projectData2, organizationId, token)
-    const projectId2 = project2.body.id
-    expect(await Project.count()).toBe(2)
-    //Si eliminamos a uno, la cuenta sería 1
-    await deleteProject(projectId2, token)   
-    expect(await Project.count()).toBe(1)  
+    test("should delete project ", async () => {
+      //creamos otro projecto, si los contamos serían 2
+      const project2 = await authCreateProject(projectData2, organizationId, token)
+      const projectId2 = project2.body.id
+      expect(await Project.count()).toBe(2)
+      //Si eliminamos a uno, la cuenta sería 1
+      await deleteProject(projectId2, token)
+      expect(await Project.count()).toBe(1)
     })
 
     //ACA HABRÍA QUE HACER TESTING DE LOS PERMISOS
-
-    })
-
-
   })
-
+})

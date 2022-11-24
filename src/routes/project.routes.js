@@ -7,7 +7,6 @@ import {
   createProjectController,
   deleteProjectController,
   // addUserToProjectController,
-  
 } from "../controllers/project/index.js"
 
 const router = Router()
@@ -17,9 +16,7 @@ router.get("/", [verifyToken], getUserProjectsController)
 
 router.get("/:projectId", [verifyToken, verifyReadProjectPermission], getProjectByIdController)
 
-router.delete("/:projectId", [verifyToken, verifyReadProjectPermission],
-  deleteProjectController
-)
+router.delete("/:projectId", [verifyToken, verifyReadProjectPermission], deleteProjectController)
 
 // router.post(
 //   "/:projectId/user",
