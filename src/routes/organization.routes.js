@@ -5,7 +5,7 @@ import {
   getOrganizationByIdController,
   getUserOrganizationsController,
 } from "../controllers/organization/index.js"
-import createProjectController from "../controllers/project/createProject.controller.js"
+// import createProjectController from "../controllers/project/createProject.controller.js"
 import { Router } from "express"
 import verifyToken from "../middlewares/auth.js"
 import verifyOrganizationPermission from "../middlewares/organization.js"
@@ -33,10 +33,10 @@ router.post(
   addUserToOrganizationController
 )
 
-router.post(
-  "/:organizationId/project",
-  [verifyToken, verifyOrganizationPermission],
-  createProjectController
-)
+// router.post(
+//   "/:organizationId/project",
+//   [verifyToken, verifyOrganizationPermission],
+//   createProjectController
+// )
 
 export default router
