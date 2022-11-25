@@ -9,7 +9,7 @@ const createProjectController = async (req, res) => {
   }
 
   let imagesFiles = req.files?.images
-  imagesFiles = imagesFiles.constructor === Object ? [req.files?.images] : req.files?.images
+  imagesFiles = imagesFiles?.constructor === Object ? [imagesFiles] : req.files?.images
   const user = req.currentUser
   const organization = await Organization.findByPk(organizationId)
   const project = Project.build(req.body)
