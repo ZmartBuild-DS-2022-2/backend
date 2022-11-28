@@ -8,7 +8,8 @@ const createProjectController = async (req, res) => {
     return res.status(400).send("You must complete all required fields")
   }
 
-  const imagesFiles = req.files?.images
+  let imagesFiles = req.files?.images
+  imagesFiles = imagesFiles?.constructor === Object ? [imagesFiles] : req.files?.images
   const user = req.currentUser
   const organization = await Organization.findByPk(organizationId)
   const project = Project.build(req.body)
