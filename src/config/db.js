@@ -24,7 +24,7 @@ export const Project = ProjectModel(sequelize, Sequelize)
 export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
 export const ProjectImage = ProjectImageModel(sequelize, Sequelize)
 
-const orm_config = async () => {
+const ormConfig = async () => {
   //Associations
   User.belongsToMany(Organization, { through: "OrganizationPermission", as: "userOrganizations" })
   Organization.belongsToMany(User, { through: "OrganizationPermission", as: "organizationUsers" })
@@ -44,4 +44,4 @@ const orm_config = async () => {
   })
 }
 
-export default orm_config
+export default ormConfig

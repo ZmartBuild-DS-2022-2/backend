@@ -17,7 +17,7 @@
     "db-migrate-undo": "sequelize db:migrate:undo",
     "db-seed": "sequelize db:seed:all",
     "db-seed-undo": "sequelize db:seed:undo",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest  --runInBand"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --silent"
   },
   "author": "FeBalla",
   "license": "ISC",

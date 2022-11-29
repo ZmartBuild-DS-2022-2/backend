@@ -33,10 +33,4 @@ router.post(
   addUserToOrganizationController
 )
 
-// router.post(
-//   "/:organizationId/project",
-//   [verifyToken, verifyOrganizationPermission],
-//   createProjectController
-// )
-
 export default router

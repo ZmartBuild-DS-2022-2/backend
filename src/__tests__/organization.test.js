@@ -1,24 +1,23 @@
 import request from "supertest"
 import app from "../app.js"
-import orm_config from "../config/db.js"
+import ormConfig from "../config/db.js"
 
 describe("Organization API routes", () => {
   let response
   let organizationId
   let token
-  let token2
+  let newToken
   let testServer
 
   beforeAll(async () => {
-    await orm_config()
+    await ormConfig()
     testServer = app.listen(5000)
   })
   afterAll((done) => {
     testServer.close(done)
   })
 
-  //Datos que se usan en general
-
+  // General Data
   const userData = {
     email: "janedoe@gmail.com",
     fullname: "Jane",
@@ -26,7 +25,7 @@ describe("Organization API routes", () => {
     password: "web1234",
   }
 
-  const userData2 = {
+  const newUserData = {
     email: "orlando@gmail.com",
     fullname: "Orli",
     lastName: "West",
@@ -34,8 +33,6 @@ describe("Organization API routes", () => {
   }
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
   const loginAuth = (body) => request(app).post("/api/auth/login").send(body)
-
-  //1- CREAR y VER ORGANIZACIONES /api/organizations/
 
   describe("POST GET /api/organizations/", () => {
     const organizationData = {
@@ -61,12 +58,11 @@ describe("Organization API routes", () => {
     const addUserToOrganization = (body, orgId, accessToken) =>
       request(app).post(`/api/organizations/${orgId}/user`).send(body).set("Cookie", accessToken)
 
-    // SE REGISTRA AL USUARIO
+    // User must register first
     beforeAll(async () => {
       await createAuth(userData)
     })
 
-    // 1- SIN LOGEAR A USUARIO - NO AUTORIZADO
     describe("When user is not authorized", () => {
       beforeAll(async () => {
         response = await unauthCreateOrganization(organizationData)
@@ -82,11 +78,11 @@ describe("Organization API routes", () => {
       })
     })
 
-    // 2- CON LOGEAR A USUARIO - AUTORIZADO
     describe("When user is authorized with token", () => {
       beforeAll(async () => {
         const { email, password } = userData
         const login_response = await loginAuth({ email, password })
+
         token = await login_response.get("set-cookie")[0]
         response = await authCreateOrganization(organizationData, token)
         organizationId = await response.body.id
@@ -103,7 +99,7 @@ describe("Organization API routes", () => {
       })
 
       test("User should be able to see her organizations by id GET \
-                /api/organizations/:organizationId  expect organizationData toMatchObject from \
+                /api/organizations/:organizationId | expect organizationData toMatchObject from \
                 response ", async () => {
         response = await getOrganizationById(organizationId, token)
         expect(response.body).toMatchObject(organizationData)
@@ -112,36 +108,28 @@ describe("Organization API routes", () => {
 
     describe("When involves another user authorization", () => {
       beforeAll(async () => {
-        //como ya tenemos la información de usuario 1: token y organizationId
-        //Crearemos el segundo usuario y haremos log in
+        // Created another user
+        const { email, password } = newUserData
+        await createAuth(newUserData)
 
-        const { email, password } = userData2
-
-        await createAuth(userData2)
-        const login_response2 = await loginAuth({ email, password })
-        // user2Id = login_response2.body.id
-        token2 = await login_response2.get("set-cookie")[0]
+        const newLoginResponse = await loginAuth({ email, password })
+        newToken = await newLoginResponse.get("set-cookie")[0]
       })
 
       test("Should not see the organization created from another user", async () => {
-        //User 2-Token 2 no debiera ver la organización
-        //del user 1 - token 1 sin autorización
-        response = await getOrganizationById(organizationId, token2)
+        response = await getOrganizationById(organizationId, newToken)
         expect(response.status).toBe(401)
       })
 
       describe("Invite user to organization", () => {
         beforeAll(async () => {
-          const { email } = userData2
-          //Token 2  debiera ver la organización del token 1 porque fue invitado por éste
-          //token 1 invita a token 2
+          const { email } = newUserData
           await addUserToOrganization({ userEmail: email }, organizationId, token)
         })
 
         test("Should see the organization created from another user when is \
         invited to participate in", async () => {
-          //ahora vemos si puede acceder a la misma ruta que no podía en el test anterior
-          response = await getOrganizationById(organizationId, token2)
+          response = await getOrganizationById(organizationId, newToken)
           expect(response.status).toBe(200)
         })
       })
