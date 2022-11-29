@@ -4,7 +4,7 @@ import ormConfig, { Project } from "../config/db.js"
 
 describe("Project API routes", () => {
   let response
-  let response2
+  let newResponse
   let organizationId
   let projectId
   let token
@@ -62,7 +62,7 @@ describe("Project API routes", () => {
       description: "descripcion_proyecto",
     }
 
-    const projectData2 = {
+    const newProjectData = {
       name: "proyecto2",
       description: "descripcion_proyecto2",
     }
@@ -80,7 +80,7 @@ describe("Project API routes", () => {
 
       // Create project
       response = await authCreateProject(projectData, organizationId, token)
-      response2 = await unauthCreateProject(projectData, organizationId)
+      newResponse = await unauthCreateProject(projectData, organizationId)
       projectId = response.body.id
     })
 
@@ -90,7 +90,7 @@ describe("Project API routes", () => {
 
     test("Should not be able to create project without login token, \
             expect 401 status code", async () => {
-      expect(response2.status).toBe(401)
+      expect(newResponse.status).toBe(401)
     })
 
     test("User should be able to see organizations created GET  \
@@ -108,7 +108,7 @@ describe("Project API routes", () => {
 
     test("should delete project ", async () => {
       // Create project 2
-      const newProject = await authCreateProject(projectData2, organizationId, token)
+      const newProject = await authCreateProject(newProjectData, organizationId, token)
       const newProjectId = newProject.body.id
 
       expect(await Project.count()).toBe(2)
