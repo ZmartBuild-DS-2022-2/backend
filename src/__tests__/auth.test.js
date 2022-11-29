@@ -8,7 +8,7 @@ describe("Auth API routes", () => {
 
   beforeAll(async () => {
     await ormConfig()
-    testServer = app.listen(5000)
+    testServer = app.listen(5001)
   })
   afterAll((done) => {
     testServer.close(done)
