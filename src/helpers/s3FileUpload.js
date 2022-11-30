@@ -1,14 +1,11 @@
 import AWS from "aws-sdk"
-import { config } from "dotenv"
 import CustomException from "./customeException.js"
 import { v4 as uuidv4 } from "uuid"
-import { AWS_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } from "../config/config.js"
-
-config()
+import config from "../config/config.js"
 
 const s3 = new AWS.S3({
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+  accessKeyId: config.AWS_ACCESS_KEY_ID,
+  secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
   signatureVersion: "v4",
 })
 
@@ -17,7 +14,7 @@ const uploadFileToS3 = async (file, params) => {
   // params must contain Key attribute, this contains a string that indicates the path
   // and file name (+ extension)
   // example: params = { Key: "images/organizations/:id/main_image/foto.png" }
-  const parameters = { ...params, Bucket: AWS_BUCKET_NAME }
+  const parameters = { ...params, Bucket: config.AWS_BUCKET_NAME }
   try {
     file.name = `${uuidv4()}.${file.name.split(".")[1]}`
     parameters.Body = file.data

@@ -1,6 +1,6 @@
 import { Project, User } from "../../config/db.js"
 
-const addUserController = async (req, res) => {
+const addUserToProjectController = async (req, res) => {
   const { userId, role } = req.body
   if (!userId || !role) {
     return res.status(400).send("You must complete all required fields")
@@ -26,4 +26,4 @@ const addUserController = async (req, res) => {
   }
 }
 
-export default addUserController
+export default addUserToProjectController

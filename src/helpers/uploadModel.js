@@ -1,12 +1,10 @@
 /* eslint-disable no-console */
-import { config } from "dotenv"
 import { join } from "path"
 
 import CustomException from "./customeException.js"
 import uploadFileToS3 from "./s3FileUpload.js"
 
 // Load environment variables
-config()
 
 let gltfFileUrl = ""
 
