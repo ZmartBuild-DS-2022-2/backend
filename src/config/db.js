@@ -5,6 +5,7 @@ import {
   ProjectModel,
   ProjectPermissionModel,
   ProjectImageModel,
+  subProjectModel,
 } from "../models/index.js"
 import config from "./config.js"
 
@@ -23,6 +24,8 @@ export const Organization = OrganizationModel(sequelize, Sequelize)
 export const Project = ProjectModel(sequelize, Sequelize)
 export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
 export const ProjectImage = ProjectImageModel(sequelize, Sequelize)
+export const SubProject = subProjectModel(sequelize, Sequelize)
+
 
 const orm_config = async () => {
   //Associations
@@ -34,6 +37,10 @@ const orm_config = async () => {
 
   User.belongsToMany(Project, { through: ProjectPermission, as: "userProjects" })
   Project.belongsToMany(User, { through: ProjectPermission, as: "projectUsers" })
+
+
+  Project.hasMany(SubProject)
+  SubProject.belongsTo(Project)
 
   Project.hasMany(ProjectImage)
   ProjectImage.belongsTo(Project)

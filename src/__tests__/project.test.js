@@ -95,8 +95,6 @@ describe("Project API routes", () => {
     test("Should be able to create project, expect 201 status code", async () => {
       expect(response.status).toBe(201)
     })
-    //userProjects.projectPermission
-
     test("Should not be able to create project without login token, \
             expect 401 status code", async () => {
       expect(response2.status).toBe(401)
