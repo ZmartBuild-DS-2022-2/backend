@@ -18,6 +18,7 @@ const verifyReadProjectPermission = async (req, res, next) => {
     }
     return res.sendStatus(401)
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err)
     return res.sendStatus(404)
   }

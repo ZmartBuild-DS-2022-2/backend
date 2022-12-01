@@ -4,9 +4,7 @@ import uploadFileToS3 from "../../helpers/s3FileUpload.js"
 const createProjectController = async (req, res) => {
   const { organizationId } = req.params
   const { name } = req.body
-  if (!name) {
-    return res.status(400).send("You must complete all required fields")
-  }
+  if (!name) return res.status(400).send("You must complete all required fields")
 
   let imagesFiles = req.files?.images
   imagesFiles = imagesFiles?.constructor === Object ? [imagesFiles] : req.files?.images
