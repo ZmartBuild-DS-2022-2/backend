@@ -1,40 +1,30 @@
 import request from "supertest"
 import app from "../app.js"
-import orm_config, { Project } from "../config/db.js"
+import ormConfig, { Project } from "../config/db.js"
 
 describe("Project API routes", () => {
   let response
-  let response2
-  // let userId
+  let newResponse
   let organizationId
   let projectId
   let token
-  // let token2
   let testServer
 
   beforeAll(async () => {
-    await orm_config()
-    testServer = app.listen(5000)
+    await ormConfig()
+    testServer = app.listen(5001)
   })
   afterAll((done) => {
     testServer.close(done)
   })
 
-  //Datos que se usan en general
-
+  // General Data
   const userData = {
     email: "janedoe@gmail.com",
     fullname: "Jane",
     lastName: "Doe",
     password: "web1234",
   }
-
-  //   const userData2 = {
-  //     email: "orlando@gmail.com",
-  //     fullname: "Orli",
-  //     lastName: "West",
-  //     password: "orl123",
-  //   }
 
   const organizationData = {
     email: "organization@gmail.com",
@@ -45,6 +35,7 @@ describe("Project API routes", () => {
   }
 
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
+
   const loginAuth = (body) => request(app).post("/api/auth/login").send(body)
 
   const createOrganization = (body, accessToken) =>
@@ -71,33 +62,35 @@ describe("Project API routes", () => {
       description: "descripcion_proyecto",
     }
 
-    const projectData2 = {
+    const newProjectData = {
       name: "proyecto2",
       description: "descripcion_proyecto2",
     }
 
     beforeAll(async () => {
-      //create and login user
+      // Create and login user
       const { email, password } = userData
       await createAuth(userData)
       const login_response = await loginAuth({ email, password })
       token = await login_response.get("set-cookie")[0]
-      // userId = login_response.body.id
-      //create organization
+
+      // Create organization
       const organization = await createOrganization(organizationData, token)
       organizationId = await organization.body.id
-      //create project
+
+      // Create project
       response = await authCreateProject(projectData, organizationId, token)
-      response2 = await unauthCreateProject(projectData, organizationId)
+      newResponse = await unauthCreateProject(projectData, organizationId)
       projectId = response.body.id
     })
 
     test("Should be able to create project, expect 201 status code", async () => {
       expect(response.status).toBe(201)
     })
+
     test("Should not be able to create project without login token, \
             expect 401 status code", async () => {
-      expect(response2.status).toBe(401)
+      expect(newResponse.status).toBe(401)
     })
 
     test("User should be able to see organizations created GET  \
@@ -114,15 +107,16 @@ describe("Project API routes", () => {
     })
 
     test("should delete project ", async () => {
-      //creamos otro projecto, si los contamos serían 2
-      const project2 = await authCreateProject(projectData2, organizationId, token)
-      const projectId2 = project2.body.id
+      // Create project 2
+      const newProject = await authCreateProject(newProjectData, organizationId, token)
+      const newProjectId = newProject.body.id
+
       expect(await Project.count()).toBe(2)
-      //Si eliminamos a uno, la cuenta sería 1
-      await deleteProject(projectId2, token)
+      // If we eliminate 1, count should be 1
+      await deleteProject(newProjectId, token)
       expect(await Project.count()).toBe(1)
     })
 
-    //ACA HABRÍA QUE HACER TESTING DE LOS PERMISOS
+    // Remains permissions testing
   })
 })

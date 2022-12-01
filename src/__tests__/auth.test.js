@@ -1,14 +1,14 @@
 import request from "supertest"
 import app from "../app.js"
-import orm_config from "../config/db.js"
+import ormConfig from "../config/db.js"
 
 describe("Auth API routes", () => {
   let testServer
   let response
 
   beforeAll(async () => {
-    await orm_config()
-    testServer = app.listen(5000)
+    await ormConfig()
+    testServer = app.listen(5001)
   })
   afterAll((done) => {
     testServer.close(done)
@@ -20,14 +20,12 @@ describe("Auth API routes", () => {
     lastName: "Doe",
     password: "web1234",
   }
-  //sacamos las variables email y password para poder modificarlas y ver que pasa
+
   const { email, fullname, lastName, password } = userData
 
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
 
-  //  1- REGISTRO
   describe("POST /api/auth/register", () => {
-    //  1a-CUANDO CREDENCIALES SON VÁLIDAS
     describe("When user credentials are valid", () => {
       beforeAll(async () => {
         response = await createAuth({ email, fullname, lastName, password })
@@ -42,7 +40,6 @@ describe("Auth API routes", () => {
       })
     })
 
-    //  1b-CUANDO CREDENCIALES SON INVALIDAS
     describe("When user credentials are invalid", () => {
       test("when password is null, responds with 401 status code", async () => {
         response = await createAuth({ email, fullname, lastName, password: null })
@@ -56,7 +53,6 @@ describe("Auth API routes", () => {
     })
   })
 
-  //  2- LOGIN
   describe("POST /api/auth/login", () => {
     const loginAuth = (body) => request(app).post("/api/auth/login").send(body)
 
@@ -67,7 +63,6 @@ describe("Auth API routes", () => {
     test("when password is correct, responds with unauthorized false", async () => {
       response = await loginAuth({ email, password })
       expect(response.unauthorized).toBe(false)
-      console.log(response)
     })
 
     test("when password is incorrect, responds with unauthorized true", async () => {

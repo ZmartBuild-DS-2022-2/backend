@@ -2,7 +2,7 @@ import { Project, SubProject } from "../../config/db.js"
 //Nose si consideramos imágen en subproyectos **
 
 const createSubprojectController = async (req, res) => {
-    console.log("resulta?")
+  console.log("resulta?")
 
   const { projectId } = req.params
   const { title } = req.body
