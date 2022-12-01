@@ -1,4 +1,4 @@
-import { Project, SubProject } from "../../config/db.js"
+import { Project, Subproject } from "../../config/db.js"
 
 const createSubprojectController = async (req, res) => {
   const { projectId } = req.params
@@ -8,7 +8,7 @@ const createSubprojectController = async (req, res) => {
   // Remains checking images
 
   const project = await Project.findByPk(projectId)
-  const subproject = SubProject.build(req.body)
+  const subproject = Subproject.build(req.body)
 
   try {
     const newSubproject = await subproject.save({ fields: ["title", "description"] })

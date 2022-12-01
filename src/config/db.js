@@ -5,7 +5,7 @@ import {
   ProjectModel,
   ProjectPermissionModel,
   ProjectImageModel,
-  subProjectModel,
+  SubprojectModel,
   SubprojectImageModel,
   GLTFModelModel,
 } from "../models/index.js"
@@ -26,7 +26,7 @@ export const Organization = OrganizationModel(sequelize, Sequelize)
 export const Project = ProjectModel(sequelize, Sequelize)
 export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
 export const ProjectImage = ProjectImageModel(sequelize, Sequelize)
-export const Subproject = subProjectModel(sequelize, Sequelize)
+export const Subproject = SubprojectModel(sequelize, Sequelize)
 export const SubprojectImage = SubprojectImageModel(sequelize, Sequelize)
 export const GLTFModel = GLTFModelModel(sequelize, Sequelize)
 

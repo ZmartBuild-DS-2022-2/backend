@@ -1,9 +1,9 @@
-import { SubProject, SubprojectImage, GTLFModel } from "../../config/db.js"
+import { Subproject, SubprojectImage, GLTFModel } from "../../config/db.js"
 
 const getSubprojectByIdController = async (req, res) => {
   const { subprojectId } = req.params
   try {
-    const subproject = await SubProject.findByPk(subprojectId, {
+    const subproject = await Subproject.findByPk(subprojectId, {
       attributes: ["id", "title", "description"],
       joinTableAttributes: [],
       include: [
@@ -12,7 +12,7 @@ const getSubprojectByIdController = async (req, res) => {
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
-          model: GTLFModel,
+          model: GLTFModel,
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
       ],
