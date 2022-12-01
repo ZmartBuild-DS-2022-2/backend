@@ -6,6 +6,8 @@ import {
   ProjectPermissionModel,
   ProjectImageModel,
   subProjectModel,
+  SubprojectImageModel,
+  GLTFModelModel,
 } from "../models/index.js"
 import config from "./config.js"
 
@@ -24,10 +26,12 @@ export const Organization = OrganizationModel(sequelize, Sequelize)
 export const Project = ProjectModel(sequelize, Sequelize)
 export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
 export const ProjectImage = ProjectImageModel(sequelize, Sequelize)
-export const SubProject = subProjectModel(sequelize, Sequelize)
+export const Subproject = subProjectModel(sequelize, Sequelize)
+export const SubprojectImage = SubprojectImageModel(sequelize, Sequelize)
+export const GLTFModel = GLTFModelModel(sequelize, Sequelize)
 
 const ormConfig = async () => {
-  //Associations
+  // Associations
   User.belongsToMany(Organization, { through: "OrganizationPermission", as: "userOrganizations" })
   Organization.belongsToMany(User, { through: "OrganizationPermission", as: "organizationUsers" })
 
@@ -37,11 +41,17 @@ const ormConfig = async () => {
   User.belongsToMany(Project, { through: ProjectPermission, as: "userProjects" })
   Project.belongsToMany(User, { through: ProjectPermission, as: "projectUsers" })
 
-  Project.hasMany(SubProject)
-  SubProject.belongsTo(Project)
-
   Project.hasMany(ProjectImage)
   ProjectImage.belongsTo(Project)
+
+  Project.hasMany(Subproject)
+  Subproject.belongsTo(Project)
+
+  Subproject.hasMany(SubprojectImage)
+  SubprojectImage.belongsTo(Project)
+
+  Subproject.hasMany(GLTFModel)
+  GLTFModel.belongsTo(Project)
 
   await sequelize.sync({ force: config.DB_FORCE_RESTART }).then(() => {
     // eslint-disable-next-line no-console

@@ -1,14 +1,11 @@
 import { Project, SubProject } from "../../config/db.js"
-//Nose si consideramos imágen en subproyectos **
 
 const createSubprojectController = async (req, res) => {
-  console.log("resulta?")
-
   const { projectId } = req.params
-  const { title } = req.body
-  if (!title) {
-    return res.status(400).send("You must complete all required fields")
-  }
+  const { title, description } = req.body
+  if (!title || !description) return res.status(400).send("You must complete all required fields")
+
+  // Remains checking images
 
   const project = await Project.findByPk(projectId)
   const subproject = SubProject.build(req.body)
@@ -23,6 +20,7 @@ const createSubprojectController = async (req, res) => {
       description: newSubproject.description,
     })
   } catch (err) {
+    console.log("ERROR:", err)
     try {
       return res.status(400).send(err.errors[0]?.message)
     } catch {

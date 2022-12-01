@@ -9,8 +9,8 @@ router.post("/:projectId", [verifyToken], createSubprojectController)
 
 // router.get("/", [verifyToken], getUserSubprojectsController)
 
-// router.get("/:projectId", [verifyToken], getSubprojectByIdController)
+// router.get("/:subprojectId", [verifyToken], getSubprojectByIdController)
 
-// router.delete("/:projectId", [verifyToken], deleteSubprojectController)
+// router.delete("/:subprojectId", [verifyToken], deleteSubprojectController)
 
 export default router
