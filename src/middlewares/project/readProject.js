@@ -18,7 +18,8 @@ const verifyReadProjectPermission = async (req, res, next) => {
     }
     return res.sendStatus(401)
   } catch (err) {
-    return res.sendStatus(401)
+    console.log(err)
+    return res.sendStatus(404)
   }
 }
 
