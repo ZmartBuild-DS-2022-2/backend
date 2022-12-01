@@ -1,4 +1,6 @@
 import verifyReadProjectPermission from "../middlewares/project/readProject.js"
+import verifyWriteProjectPermmission from "../middlewares/project/readProject.js"
+import verifyAdminProjectPermmission from "../middlewares/project/readProject.js"
 import verifyToken from "../middlewares/auth.js"
 import { Router } from "express"
 import {
@@ -11,16 +13,20 @@ import {
 
 const router = Router()
 
-router.post("/:organizationId", [verifyToken], createProjectController)
+router.post(
+  "/:organizationId",
+  [verifyToken, verifyWriteProjectPermmission],
+  createProjectController
+)
 router.get("/", [verifyToken], getUserProjectsController)
 
 router.get("/:projectId", [verifyToken, verifyReadProjectPermission], getProjectByIdController)
 
-router.delete("/:projectId", [verifyToken, verifyReadProjectPermission], deleteProjectController)
+router.delete("/:projectId", [verifyToken, verifyWriteProjectPermmission], deleteProjectController)
 
 router.post(
   "/:projectId/user",
-  [verifyToken, verifyReadProjectPermission],
+  [verifyToken, verifyAdminProjectPermmission],
   addUserToProjectController
 )
 
