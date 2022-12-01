@@ -1,5 +1,6 @@
-import { Project, Subproject, SubprojectImage } from "../../config/db.js"
+import { Project, Subproject, SubprojectImage, Gltf } from "../../config/db.js"
 import uploadFileToS3 from "../../helpers/s3FileUpload.js"
+import { uploadModelFilesToS3 } from "../../helpers/uploadModel.js"
 
 const createSubprojectController = async (req, res) => {
   const { projectId } = req.params
@@ -14,10 +15,19 @@ const createSubprojectController = async (req, res) => {
 
   try {
     const newSubproject = await subproject.save({ fields: ["title", "description"] })
-
     await project.addSubProject(newSubproject)
 
     try {
+      try {
+        // 3d models are created and saved
+        const modelFilesUrl = await uploadModelFilesToS3(newSubproject.id, req.files)
+        const newGltfModel = Gltf.build({ url: modelFilesUrl })
+        const newGltfModelCreated = await newGltfModel.save({ fields: ["url"] })
+        await subproject.addGltfmodel(newGltfModelCreated)
+      } catch (err) {
+        return res.status(400).send("Something went wrong uploading the model")
+      }
+
       if (imagesFiles) {
         await Promise.all(
           imagesFiles.map(async (imageFile) => {

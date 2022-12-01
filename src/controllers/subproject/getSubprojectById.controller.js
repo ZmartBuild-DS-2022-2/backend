@@ -1,19 +1,9 @@
-import { Organization, Project, Subproject, SubprojectImage, GLTFModel } from "../../config/db.js"
+import { Organization, Project, Subproject, SubprojectImage, Gltf } from "../../config/db.js"
 
 const getSubprojectByIdController = async (req, res) => {
   const { subprojectId } = req.params
 
   try {
-    // const project = await Project.findByPk(projectId, {
-    //   include: [
-    //     {
-    //       model: Organization,
-    //       attributes: { exclude: ["createdAt", "updatedAt"] },
-    //     },
-    //   ],
-    // })
-    // console.log("Encontró:", project)
-
     let subproject = await Subproject.findByPk(subprojectId, {
       attributes: ["id", "title", "description"],
       joinTableAttributes: [],
@@ -27,7 +17,7 @@ const getSubprojectByIdController = async (req, res) => {
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
-          model: GLTFModel,
+          model: Gltf,
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
       ],
@@ -38,6 +28,7 @@ const getSubprojectByIdController = async (req, res) => {
     })
 
     // Force to add organization to subproject
+    // I don't know if there is a better and fast way
     subproject.dataValues.organization = orga
     return res.status(200).json(subproject)
   } catch (err) {

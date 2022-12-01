@@ -1,4 +1,4 @@
-const GLTFModelModel = (sequelize, type) => {
+const GltfModel = (sequelize, type) => {
   return sequelize.define("gltfmodel", {
     id: {
       type: type.UUID,
@@ -17,4 +17,4 @@ const GLTFModelModel = (sequelize, type) => {
   })
 }
 
-export default GLTFModelModel
+export default GltfModel

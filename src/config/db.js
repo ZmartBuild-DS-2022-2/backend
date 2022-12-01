@@ -7,7 +7,7 @@ import {
   ProjectImageModel,
   SubprojectModel,
   SubprojectImageModel,
-  GLTFModelModel,
+  GltfModel,
 } from "../models/index.js"
 import config from "./config.js"
 
@@ -28,7 +28,7 @@ export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
 export const ProjectImage = ProjectImageModel(sequelize, Sequelize)
 export const Subproject = SubprojectModel(sequelize, Sequelize)
 export const SubprojectImage = SubprojectImageModel(sequelize, Sequelize)
-export const GLTFModel = GLTFModelModel(sequelize, Sequelize)
+export const Gltf = GltfModel(sequelize, Sequelize)
 
 const ormConfig = async () => {
   // Associations
@@ -50,8 +50,8 @@ const ormConfig = async () => {
   Subproject.hasMany(SubprojectImage)
   SubprojectImage.belongsTo(Project)
 
-  Subproject.hasMany(GLTFModel)
-  GLTFModel.belongsTo(Project)
+  Subproject.hasMany(Gltf)
+  Gltf.belongsTo(Project)
 
   await sequelize.sync({ force: config.DB_FORCE_RESTART }).then(() => {
     // eslint-disable-next-line no-console
