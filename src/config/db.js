@@ -58,8 +58,10 @@ const ormConfig = async () => {
   User.hasMany(Invitation)
   Invitation.belongsTo(User)
 
-  Invitation.belongsTo(Organization, { foreignKey: "objectiveId" })
-  Invitation.belongsTo(Project, { foreignKey: "objectiveId" })
+  Organization.hasMany(Invitation)
+  Project.hasMany(Invitation)
+  Invitation.belongsTo(Organization, { foreignKey: "organizationId" })
+  Invitation.belongsTo(Project, { foreignKey: "projectId" })
 
   await sequelize.sync({ force: config.DB_FORCE_RESTART }).then(() => {
     // eslint-disable-next-line no-console

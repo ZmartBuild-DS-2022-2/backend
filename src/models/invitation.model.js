@@ -6,12 +6,6 @@ const InvitationModel = (sequelize, type) => {
       allowNull: false,
       primaryKey: true,
     },
-    objectiveId: {
-      type: type.UUID,
-      defaultValue: type.UUIDV4,
-      allowNull: false,
-      primaryKey: true,
-    },
     type: {
       type: type.STRING,
       allowNull: { args: false, msg: "Invitation type can't be empty" },

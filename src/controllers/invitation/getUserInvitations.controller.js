@@ -6,8 +6,8 @@ const getUserInvitationsController = async (req, res) => {
   // const { organizationId } = req.query
   try {
     const invitations = await currentUser.getInvitations({
-      attributes: ["id", "userId", "objectiveId", "type", "accessType", "state", "createdAt"],
-      joinTableAttributes: ["type", "objectiveId"],
+      attributes: ["id", "userId", "type", "accessType", "state", "createdAt"],
+      joinTableAttributes: [],
       include: [
         {
           model: Organization,

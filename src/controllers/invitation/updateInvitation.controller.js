@@ -32,7 +32,6 @@ const updateInvitationController = async (req, res) => {
 
     return res.status(200).json({
       id: invitation.id,
-      objectiveId: invitation.objectiveId,
       type: invitation.type,
       accessType: invitation.accessType,
     })
