@@ -8,7 +8,7 @@ import {
 
 const router = Router()
 
-router.post("/:invitationId", [verifyToken], createInvitationController)
+router.post("/", [verifyToken], createInvitationController)
 router.get("/", [verifyToken], getUserInvitationsController)
 
 router.patch("/:invitationId", [verifyToken], updateInvitationController)

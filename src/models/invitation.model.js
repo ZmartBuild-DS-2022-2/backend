@@ -6,12 +6,6 @@ const InvitationModel = (sequelize, type) => {
       allowNull: false,
       primaryKey: true,
     },
-    userId: {
-      type: type.UUID,
-      defaultValue: type.UUIDV4,
-      allowNull: false,
-      primaryKey: true,
-    },
     objectiveId: {
       type: type.UUID,
       defaultValue: type.UUIDV4,
