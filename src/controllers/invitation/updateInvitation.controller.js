@@ -7,7 +7,7 @@ const updateInvitationController = async (req, res) => {
   const fields = [state]
   const allowedFields = ["state"]
 
-  const user = req.currentUser
+  const { currentUser } = req
 
   let updater = {}
   fields.forEach((item, index) => {
@@ -23,10 +23,10 @@ const updateInvitationController = async (req, res) => {
     if (state == "Accepted") {
       if (invitation.type == "Organization") {
         const organization = await Organization.findByPk(invitation.objetiveId)
-        await user.addUserOrganization(organization)
+        await currentUser.addUserOrganization(organization)
       } else if (invitation.type == "Project") {
         const project = await Project.findByPk(invitation.objetiveId)
-        await user.addUserProject(project, { through: { role: accessType } })
+        await currentUser.addUserProject(project, { through: { role: accessType } })
       }
     }
 
