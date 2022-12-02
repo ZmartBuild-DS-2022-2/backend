@@ -58,6 +58,9 @@ const ormConfig = async () => {
   User.hasMany(Invitation)
   Invitation.belongsTo(User)
 
+  Invitation.belongsTo(Organization, { foreignKey: "objectiveId" })
+  Invitation.belongsTo(Project, { foreignKey: "objectiveId" })
+
   await sequelize.sync({ force: config.DB_FORCE_RESTART }).then(() => {
     // eslint-disable-next-line no-console
     console.log("SERVER (DB): Database synchronized succesfully")
