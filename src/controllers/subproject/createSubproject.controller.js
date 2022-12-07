@@ -10,6 +10,11 @@ const createSubprojectController = async (req, res) => {
   let imagesFiles = req.files?.images
   imagesFiles = imagesFiles?.constructor === Object ? [imagesFiles] : req.files?.images
 
+  const binFile = req.files?.bin_file
+  const gltfFile = req.files?.gltf_file
+
+  const existsModel = binFile && gltfFile
+
   const project = await Project.findByPk(projectId)
   const subproject = Subproject.build(req.body)
 
@@ -17,7 +22,7 @@ const createSubprojectController = async (req, res) => {
     const newSubproject = await subproject.save({ fields: ["title", "description"] })
     await project.addSubProject(newSubproject)
 
-    try {
+    if (existsModel) {
       try {
         // 3d models are created and saved
         const modelFilesUrl = await uploadModelFilesToS3(newSubproject.id, req.files)
@@ -27,8 +32,10 @@ const createSubprojectController = async (req, res) => {
       } catch (err) {
         return res.status(400).send("Something went wrong uploading the model")
       }
+    }
 
-      if (imagesFiles) {
+    if (imagesFiles) {
+      try {
         await Promise.all(
           imagesFiles.map(async (imageFile) => {
             const uploadParams = {
@@ -40,12 +47,12 @@ const createSubprojectController = async (req, res) => {
             await newSubproject.addSubprojectImage(newProjectImage)
           })
         )
-      }
-    } catch (err) {
-      try {
-        return res.status(400).send(err.errors[0]?.message)
-      } catch {
-        return res.status(400).send("Something went wrong uploading a file")
+      } catch (err) {
+        try {
+          return res.status(400).send(err.errors[0]?.message)
+        } catch {
+          return res.status(400).send("Something went wrong uploading a file")
+        }
       }
     }
 

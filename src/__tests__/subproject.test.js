@@ -5,7 +5,7 @@ import orm_config from "../config/db.js"
 
 describe("Project API routes", () => {
   let response
-  let response2
+  let newResponse
   let projectId
   let organizationId
   // let subprojectId
@@ -14,7 +14,7 @@ describe("Project API routes", () => {
 
   beforeAll(async () => {
     await orm_config()
-    testServer = app.listen(5000)
+    testServer = app.listen(5001)
   })
   afterAll((done) => {
     testServer.close(done)
@@ -56,6 +56,9 @@ describe("Project API routes", () => {
   const subprojectData = {
     title: "title subproyecto",
     description: "subproyecto_desc",
+    images: {},
+    gltf_file: {},
+    bin_file: {},
   }
 
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
@@ -91,8 +94,8 @@ describe("Project API routes", () => {
     projectId = project.body.id
 
     // Create subsub project
-    response = authCreateSubproject(subprojectData, projectId, token)
-    response2 = unauthCreateSubproject(subprojectData, projectId)
+    response = await authCreateSubproject(subprojectData, projectId, token)
+    newResponse = await unauthCreateSubproject(subprojectData, projectId)
   })
 
   test("Should be able to create subproject, expect 201 status code", async () => {
@@ -101,7 +104,7 @@ describe("Project API routes", () => {
 
   test("Should not be able to create subproject without login token, \
             expect 401 status code", async () => {
-    expect(response2.status).toBe(401)
+    expect(newResponse.status).toBe(401)
   })
 
   // test("User should be able to see organizations created GET  \
