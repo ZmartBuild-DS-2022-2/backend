@@ -26,7 +26,7 @@ const updateInvitationController = async (req, res) => {
     if (state == "Accepted") {
       if (invitation.type == "organization") {
         const organization = await Organization.findByPk(invitation.organizationId)
-        await currentUser.addUserOrganization(organization)
+        await currentUser.addUserOrganization(organization, { through: { role: accessType } })
       } else if (invitation.type == "project") {
         const project = await Project.findByPk(invitation.projectId)
         await currentUser.addUserProject(project, { through: { role: accessType } })

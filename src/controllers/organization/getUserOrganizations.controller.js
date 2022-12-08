@@ -4,7 +4,7 @@ const getUserOrganizationsController = async (req, res) => {
   try {
     const organizations = await currentUser.getUserOrganizations({
       attributes: ["id", "name", "email", "description", "websiteUrl", "imgUrl"],
-      joinTableAttributes: [],
+      joinTableAttributes: ["role"],
     })
     return res.status(200).json(organizations)
   } catch (err) {

@@ -16,7 +16,7 @@ const createOrganizationController = async (req, res) => {
       fields: ["name", "email", "description", "websiteUrl"],
     })
     newOrganization = await Organization.findByPk(newOrganization.id)
-    await user.addUserOrganization(newOrganization)
+    await user.addUserOrganization(newOrganization, { through: { role: "a" } })
 
     try {
       if (image) {
