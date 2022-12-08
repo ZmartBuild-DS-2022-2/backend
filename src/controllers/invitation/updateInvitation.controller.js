@@ -4,6 +4,9 @@ const updateInvitationController = async (req, res) => {
   const { id, state, accessType } = req.body
   if (!state || !accessType || !id) return res.status(400).send("You must send all required info")
 
+  if (!(state == "Accepted" || state == "Declined" || state == "Waiting"))
+    return res.status(400).send(`${state} is not a valid invitation state`)
+
   const fields = [state]
   const allowedFields = ["state"]
 
@@ -21,11 +24,11 @@ const updateInvitationController = async (req, res) => {
     const invitation = await Invitation.findByPk(id)
 
     if (state == "Accepted") {
-      if (invitation.type == "Organization") {
-        const organization = await Organization.findByPk(invitation.objetiveId)
+      if (invitation.type == "organization") {
+        const organization = await Organization.findByPk(invitation.organizationId)
         await currentUser.addUserOrganization(organization)
-      } else if (invitation.type == "Project") {
-        const project = await Project.findByPk(invitation.objetiveId)
+      } else if (invitation.type == "project") {
+        const project = await Project.findByPk(invitation.projectId)
         await currentUser.addUserProject(project, { through: { role: accessType } })
       }
     }

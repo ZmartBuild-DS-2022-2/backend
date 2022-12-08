@@ -1,14 +1,12 @@
 import request from "supertest"
 import app from "../app.js"
 import orm_config from "../config/db.js"
-// import orm_config, { SubProject } from "../config/db.js"
 
 describe("Project API routes", () => {
   let response
   let newResponse
   let projectId
   let organizationId
-  // let subprojectId
   let token
   let testServer
 
@@ -107,29 +105,5 @@ describe("Project API routes", () => {
     expect(newResponse.status).toBe(401)
   })
 
-  // test("User should be able to see organizations created GET  \
-  //         /api/projects/:organizationId \
-  //          expect organizationData toMatchObject from response ", async () => {
-  //   response = await authGetProjects(organizationId, token)
-  //   expect(response.body[0]).toMatchObject(projectData)
-  // })
-
-  // test("User should be able to see her organizations by id GET \
-  //         /api/organizations/:organizationId  expect 200 status response ", async () => {
-  //   response = await getProjectById(projectId, token)
-  //   expect(response.status).toBe(200)
-  // })
-
-  // test("should delete project ", async () => {
-  //   //creamos otro projecto, si los contamos serían 2
-  //   const project2 = await authCreateProject(projectData2, organizationId, token)
-  //   const projectId2 = project2.body.id
-  //   expect(await SubProject.count()).toBe(2)
-  //   //Si eliminamos a uno, la cuenta sería 1
-  //   await deleteProject(projectId2, token)
-  //   expect(await SubProject.count()).toBe(1)
-  // })
-
-  //ACA HABRÍA QUE HACER TESTING DE LOS PERMISOS
-  //   })
+  // Remains permission testing
 })

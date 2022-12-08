@@ -1,6 +1,8 @@
 import { Subproject } from "../../config/db.js"
 
 const updateSubprojectController = async (req, res) => {
+  // TODO: review permisions for updating
+
   const { title, description } = req.body
   const fields = [title, description]
   const allowedFields = ["title", "description"]

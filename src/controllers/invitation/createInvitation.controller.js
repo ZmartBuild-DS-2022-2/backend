@@ -6,11 +6,11 @@ const createInvitationController = async (req, res) => {
   if (!email || !type || !objectiveId) {
     return res.status(400).send("You must send an email and the required data")
   }
-  if (type == "Project" && !accessType) return res.status(400).send("You must send an accessType")
+  if (type == "project" && !accessType) return res.status(400).send("You must send an accessType")
 
   const { currentUser } = req
   if (currentUser.email == email)
-    return res.status(400).send("You can't send invitations to yourself")
+    return res.status(400).send("You can't send an invitation to yourself")
 
   // User who received the invitation
   const userObjective = await User.findOne({ where: { email: email } })
@@ -23,12 +23,13 @@ const createInvitationController = async (req, res) => {
     prevInvitation = await Invitation.findOne({
       where: { userId: userObjective?.id, projectId: objectiveId },
     })
-  else
+  else if (type == "organization")
     prevInvitation = await Invitation.findOne({
       where: { userId: userObjective?.id, organizationId: objectiveId },
     })
 
-  if (prevInvitation) return res.status(400).send("You have already sent an invitation")
+  if (prevInvitation)
+    return res.status(400).send(`You have already sent an invitation for this ${type} to the user`)
 
   const data = {
     type: type,
@@ -61,11 +62,10 @@ const createInvitationController = async (req, res) => {
       state: newInvitation.state,
     })
   } catch (err) {
-    console.log(err)
     try {
       return res.status(400).send(err.errors[0]?.message)
     } catch (err2) {
-      return res.status(400).send("Something went wrong")
+      return res.status(400).send("Something went wrong while creating the invitation")
     }
   }
 }
