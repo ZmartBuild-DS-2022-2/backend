@@ -1,31 +1,21 @@
-import { User } from "../../config/db.js"
+import { ProjectPermission } from "../../config/db.js"
 
 const verifyAdminProjectPermmission = async (req, res, next) => {
-  const id = req.params.projectId
+  const { currentUser } = req
+  const { projectId } = req.params
 
-  const userProjects = await User.findByPk(req.currentUser.id, { include: "projects" })
-
-  const projects = []
-  userProjects.projects.forEach((item) => {
-    projects.push({
-      id: item.id,
-      role: item.projectPermission.role,
+  try {
+    const permission = await ProjectPermission.findOne({
+      where: { userId: currentUser.id, projectId: projectId, role: "a" },
     })
-  })
 
-  let permission = false
-  projects.forEach((item) => {
-    if (id == item.id) {
-      if (item.role == "a") {
-        permission = true
-      }
+    if (permission) {
+      return next()
     }
-  })
-
-  if (permission) {
-    return next()
+    res.sendStatus(404)
+  } catch (err) {
+    return res.sendStatus(404)
   }
-  return res.sendStatus(404)
 }
 
 export default verifyAdminProjectPermmission

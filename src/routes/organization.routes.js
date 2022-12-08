@@ -8,7 +8,8 @@ import {
 
 import { Router } from "express"
 import verifyToken from "../middlewares/auth.js"
-import verifyOrganizationPermission from "../middlewares/organization.js"
+import verifyReadOrganizationPermission from "../middlewares/organization/readOrganization.js"
+import verifyWriteOrganizationPermission from "../middlewares/organization/writeOrganization.js"
 
 const router = Router()
 
@@ -17,19 +18,19 @@ router.get("/", [verifyToken], getUserOrganizationsController)
 
 router.get(
   "/:organizationId",
-  [verifyToken, verifyOrganizationPermission],
+  [verifyToken, verifyReadOrganizationPermission],
   getOrganizationByIdController
 )
 
 router.delete(
   "/:organizationId",
-  [verifyToken, verifyOrganizationPermission],
+  [verifyToken, verifyWriteOrganizationPermission],
   deleteOrganizationController
 )
 
 router.post(
   "/:organizationId/user",
-  [verifyToken, verifyOrganizationPermission],
+  [verifyToken, verifyWriteOrganizationPermission],
   addUserToOrganizationController
 )
 

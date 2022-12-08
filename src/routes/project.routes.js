@@ -1,4 +1,3 @@
-import verifyOrganizationPermission from "../middlewares/organization.js"
 import verifyToken from "../middlewares/auth.js"
 import { Router } from "express"
 import {
@@ -11,11 +10,7 @@ import {
 
 const router = Router()
 
-router.post(
-  "/:organizationId",
-  [verifyToken, verifyOrganizationPermission],
-  createProjectController
-)
+router.post("/:organizationId", [verifyToken], createProjectController)
 router.get("/", [verifyToken], getUserProjectsController)
 
 router.get("/:projectId", [verifyToken], getProjectByIdController)

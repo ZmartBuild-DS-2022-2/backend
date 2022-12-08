@@ -1,25 +1,19 @@
-import { Project, User } from "../../config/db.js"
+import { ProjectPermission } from "../../config/db.js"
 
 const verifyReadProjectPermission = async (req, res, next) => {
+  const { currentUser } = req
   const { projectId } = req.params
+
   try {
-    const userProjects = await User.findByPk(req.currentUser.id, {
-      include: [
-        {
-          model: Project,
-          as: "userProjects",
-          where: { id: projectId },
-        },
-      ],
+    const permission = await ProjectPermission.findOne({
+      where: { userId: currentUser.id, projectId: projectId },
     })
 
-    if (userProjects) {
+    if (permission) {
       return next()
     }
-    return res.sendStatus(401)
+    res.sendStatus(404)
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err)
     return res.sendStatus(404)
   }
 }
