@@ -27,6 +27,7 @@ const createInvitationController = async (req, res) => {
     prevInvitation = await Invitation.findOne({
       where: { userId: userObjective?.id, organizationId: objectiveId },
     })
+  else return res.status(400).send(`Can't create invitation for ${type} type`)
 
   if (prevInvitation)
     return res.status(400).send(`You have already sent an invitation for this ${type} to the user`)
