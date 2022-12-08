@@ -3,13 +3,14 @@ import uploadFileToS3 from "../../helpers/s3FileUpload.js"
 
 const createOrganizationController = async (req, res) => {
   const { name } = req.body
-  if (!name) {
-    return res.status(400).send("You must complete all required fields")
-  }
+  if (!name) return res.status(400).send("You must complete all required fields")
+
   let image
   if (req.files) image = req.files.image
+
   const user = req.currentUser
   const organization = Organization.build(req.body)
+
   try {
     let newOrganization = await organization.save({
       fields: ["name", "email", "description", "websiteUrl"],

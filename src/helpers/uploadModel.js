@@ -33,12 +33,10 @@ export const uploadModelFilesToS3 = async (subproject_id, files) => {
   const folderPath = `models/${subproject_id}/`
   await Promise.all(
     filesToUpload.map(async (file) => {
+      const extension = file.name.split(".")[1]
       const Key = join(folderPath, file.name)
-      const data = await uploadFileToS3({
-        file,
-        Key,
-      })
-      if (file.name.split(".")[1] == "gltf") gltfFileUrl = data.Location
+      const data = await uploadFileToS3(file, { Key: Key })
+      if (extension == "gltf") gltfFileUrl = data
     })
   )
   return gltfFileUrl
