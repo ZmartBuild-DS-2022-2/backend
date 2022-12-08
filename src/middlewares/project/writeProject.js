@@ -12,7 +12,7 @@ const verifyWriteProjectPermmission = async (req, res, next) => {
     if (permission) {
       return next()
     }
-    res.sendStatus(404)
+    return res.sendStatus(404)
   } catch (err) {
     return res.sendStatus(404)
   }
