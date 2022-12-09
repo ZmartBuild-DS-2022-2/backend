@@ -4,3 +4,4 @@ export { default as getProjectByIdController } from "./getProjectById.controller
 export { default as deleteProjectController } from "./deleteProject.controller.js"
 export { default as addUserToProjectController } from "./addUserToProject.controller.js"
 export { default as updateProjectController } from "./updateProject.controller.js"
+export { default as getProjectSubprojectsController } from "./getProjectSubprojects.controller.js"
