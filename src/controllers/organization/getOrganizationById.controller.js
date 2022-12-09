@@ -7,8 +7,8 @@ const getOrganizationByIdController = async (req, res) => {
       where: { id: organizationId },
       joinTableAttributes: ["role"],
     })
-
-    return res.status(200).json(organization[0])
+    if (organization.length > 0) return res.status(200).json(organization[0])
+    return res.status(404).send(`Couldn't find organization with id ${organizationId}`)
   } catch (err) {
     try {
       return res.status(400).send(err.errors[0]?.message)
