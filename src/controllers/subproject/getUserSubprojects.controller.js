@@ -28,7 +28,6 @@ const getUserSubprojectsController = async (req, res) => {
 
     return res.status(200).json(subProjects)
   } catch (err) {
-    console.log(err)
     try {
       return res.status(400).send(err.errors[0]?.message)
     } catch {
