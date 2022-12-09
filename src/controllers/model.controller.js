@@ -6,7 +6,6 @@ const modelUpload = async (req, res) => {
   if (!files) return res.status(400).send("You must send files field")
   if (files.length == 0) return res.status(400).send("No files sended")
   try {
-    // subProject = Sequelize.Subproject.create()
     const subProject_id = uuidv4()
     const gltfFileUrl = await uploadModelFilesToS3(subProject_id, files)
     // gltfFileUrl must be saved in the model created

@@ -5,8 +5,8 @@ import {
   getProjectByIdController,
   createProjectController,
   deleteProjectController,
-  addUserToProjectController,
   getProjectSubprojectsController,
+  updateProjectController,
 } from "../controllers/project/index.js"
 import verifyWriteOrganizationPermission from "../middlewares/organization/writeOrganization.js"
 import verifyWriteProjectPermission from "../middlewares/project/writeProject.js"
@@ -25,8 +25,12 @@ router.get("/:projectId", [verifyToken, verifyReadProjectPermission], getProject
 
 router.delete("/:projectId", [verifyToken, verifyWriteProjectPermission], deleteProjectController)
 
-router.get("/:projectId/subprojects", [verifyToken], getProjectSubprojectsController)
+router.get(
+  "/:projectId/subprojects",
+  [verifyToken, verifyReadProjectPermission],
+  getProjectSubprojectsController
+)
 
-router.post("/:projectId/user", [verifyToken], addUserToProjectController)
+router.patch("/:projectId", [verifyToken, verifyWriteProjectPermission], updateProjectController)
 
 export default router

@@ -4,7 +4,7 @@ const getUserSubprojectsController = async (req, res) => {
   const { limit } = req.query
   const { currentUser } = req
 
-  // We find the project and then we returned the subprojects
+  // We find the projects and then we returned the subprojects
   try {
     const projects = await currentUser.getUserProjects({
       attributes: ["id", "name", "description", "createdAt"],

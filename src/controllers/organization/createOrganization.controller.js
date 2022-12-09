@@ -24,9 +24,8 @@ const createOrganizationController = async (req, res) => {
         const imgUrl = await uploadFileToS3(image, params)
         await Organization.update({ imgUrl }, { where: { id: newOrganization.id } })
       }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
+    } catch (err) {
+      return res.status(400).send("Something went wrong uploading the file")
     }
 
     return res.status(201).json({

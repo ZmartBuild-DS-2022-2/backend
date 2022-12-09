@@ -1,9 +1,10 @@
 import {
-  addUserToOrganizationController,
+  updateOrganizationController,
   createOrganizationController,
   deleteOrganizationController,
   getOrganizationByIdController,
   getUserOrganizationsController,
+  getOrganizationProjectsController,
 } from "../controllers/organization/index.js"
 
 import { Router } from "express"
@@ -14,6 +15,7 @@ import verifyWriteOrganizationPermission from "../middlewares/organization/write
 const router = Router()
 
 router.post("/", [verifyToken], createOrganizationController)
+
 router.get("/", [verifyToken], getUserOrganizationsController)
 
 router.get(
@@ -22,16 +24,22 @@ router.get(
   getOrganizationByIdController
 )
 
+router.get(
+  "/:organizationId/projects",
+  [verifyToken, verifyReadOrganizationPermission],
+  getOrganizationProjectsController
+)
+
 router.delete(
   "/:organizationId",
   [verifyToken, verifyWriteOrganizationPermission],
   deleteOrganizationController
 )
 
-router.post(
-  "/:organizationId/user",
+router.patch(
+  "/:organizationId",
   [verifyToken, verifyWriteOrganizationPermission],
-  addUserToOrganizationController
+  updateOrganizationController
 )
 
 export default router

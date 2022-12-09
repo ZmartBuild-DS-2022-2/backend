@@ -6,6 +6,7 @@ import {
   getSubprojectByIdController,
   getUserSubprojectsController,
   deleteSubprojectController,
+  updateSubprojectController,
 } from "../controllers/subproject/index.js"
 import verifyWriteProjectPermission from "../middlewares/project/writeProject.js"
 import verifyReadProjectPermission from "../middlewares/project/readProject.js"
@@ -26,6 +27,12 @@ router.delete(
   "/:subprojectId",
   [verifyToken, verifyWriteProjectPermission],
   deleteSubprojectController
+)
+
+router.patch(
+  "/:subprojectId",
+  [verifyToken, verifyWriteProjectPermission],
+  updateSubprojectController
 )
 
 export default router

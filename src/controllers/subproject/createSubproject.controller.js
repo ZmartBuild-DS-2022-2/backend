@@ -24,7 +24,7 @@ const createSubprojectController = async (req, res) => {
 
     if (existsModel) {
       try {
-        // 3d models are created and saved
+        // 3D models are created and saved
         const modelFilesUrl = await uploadModelFilesToS3(newSubproject.id, req.files)
         const newGltfModel = Gltf.build({ url: modelFilesUrl })
         const newGltfModelCreated = await newGltfModel.save({ fields: ["url"] })
