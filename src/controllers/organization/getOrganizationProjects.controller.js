@@ -1,7 +1,6 @@
 import { Organization, ProjectImage } from "../../config/db.js"
 
 const getOrganizationProjectsController = async (req, res) => {
-  console.log("---Controller---")
   const { currentUser } = req
   const { organizationId } = req.params
   const { limit } = req.query
