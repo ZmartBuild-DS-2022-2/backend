@@ -11,6 +11,12 @@ const getSubprojectByIdController = async (req, res) => {
         {
           model: Project,
           attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: [
+            {
+              model: Organization,
+              attributes: ["id", "name", "email", "description", "websiteUrl", "imgUrl"],
+            },
+          ],
         },
         {
           model: SubprojectImage,
@@ -23,13 +29,6 @@ const getSubprojectByIdController = async (req, res) => {
       ],
     })
 
-    const orga = await Organization.findByPk(subproject.project.organizationId, {
-      attributes: ["id", "name", "email", "description", "websiteUrl", "imgUrl"],
-    })
-
-    // Force to add organization to subproject
-    // I don't know if there is a better and fast way
-    subproject.dataValues.organization = orga
     return res.status(200).json(subproject)
   } catch (err) {
     try {

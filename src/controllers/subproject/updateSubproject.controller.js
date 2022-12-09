@@ -1,8 +1,6 @@
 import { Subproject } from "../../config/db.js"
 
 const updateSubprojectController = async (req, res) => {
-  // TODO: review permisions for updating
-
   const { title, description } = req.body
   const fields = [title, description]
   const allowedFields = ["title", "description"]
@@ -18,6 +16,7 @@ const updateSubprojectController = async (req, res) => {
   try {
     await Subproject.update(updater, { where: { id: id } })
     const subproject = await Subproject.findByPk(id)
+
     return res.status(200).json({
       id: subproject.id,
       name: subproject.name,

@@ -10,7 +10,6 @@ import dummyRoutes from "./routes/index.js"
 import subprojectRoutes from "./routes/subproject.routes.js"
 import projectRoutes from "./routes/project.routes.js"
 import organizationRoutes from "./routes/organization.routes.js"
-import userRoutes from "./routes/user.routes.js"
 import invitationRoutes from "./routes/invitation.routes.js"
 import config from "./config/config.js"
 
@@ -35,7 +34,6 @@ app.use("/api/dummy", dummyRoutes)
 app.use("/api/subprojects", subprojectRoutes)
 app.use("/api/projects", projectRoutes)
 app.use("/api/organizations", organizationRoutes)
-app.use("/api/user", userRoutes)
 app.use("/api/invitations", invitationRoutes)
 
 export default app
