@@ -1,4 +1,4 @@
-import { Subproject } from "../../config/db.js"
+import { Subproject, Project } from "../../config/db.js"
 
 const getUserSubprojectsController = async (req, res) => {
   const { limit } = req.query
@@ -18,10 +18,17 @@ const getUserSubprojectsController = async (req, res) => {
       where: { projectId: projectsIds },
       order: [["createdAt", "DESC"]],
       limit,
+      include: [
+        {
+          model: Project,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        },
+      ],
     })
 
     return res.status(200).json(subProjects)
   } catch (err) {
+    console.log(err)
     try {
       return res.status(400).send(err.errors[0]?.message)
     } catch {
