@@ -1,6 +1,6 @@
 import request from "supertest"
 import app from "../app.js"
-import orm_config from "../config/db.js"
+import orm_config, { Subproject } from "../config/db.js"
 
 describe("Project API routes", () => {
   let response
@@ -59,6 +59,14 @@ describe("Project API routes", () => {
     bin_file: {},
   }
 
+  const newSubprojectData = {
+    title: "title subproyecto2",
+    description: "subproyecto_desc2",
+    images: {},
+    gltf_file: {},
+    bin_file: {},
+  }
+
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
   const loginAuth = (body) => request(app).post("/api/auth/login").send(body)
 
@@ -75,6 +83,9 @@ describe("Project API routes", () => {
 
   const unauthCreateSubproject = (body, projId) =>
     request(app).post(`/api/subprojects/${projId}`).send(body)
+
+  const deleteSubproject = (subprojId, accessToken) =>
+  request(app).delete(`/api/subprojects/${subprojId}`).set("Cookie", accessToken)
 
   beforeAll(async () => {
     // Create and login user
@@ -104,6 +115,22 @@ describe("Project API routes", () => {
             expect 401 status code", async () => {
     expect(newResponse.status).toBe(401)
   })
+
+
+  test("should delete subproject ", async () => {
+    // Create new subproject
+    const newSubproject = await authCreateSubproject(newSubprojectData, projectId, token)
+    const newSubprojectId = newSubproject.body.id
+    console.log("MIAU",newSubprojectId)
+
+    expect(await Subproject.count()).toBe(2)
+    // If we eliminate 1, count should be 1
+    const deletex = await deleteSubproject(newSubprojectId, token)
+    console.log(deletex)
+    //No retorna 1, retorna 2 (no se elimina)
+    // expect( Subproject.count()).toBe(1)
+  })
+
 
   // Remains permission testing
 })

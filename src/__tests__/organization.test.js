@@ -6,7 +6,7 @@ describe("Organization API routes", () => {
   let response
   let organizationId
   let token
-  let newToken
+  // let newToken
   let testServer
 
   beforeAll(async () => {
@@ -25,12 +25,12 @@ describe("Organization API routes", () => {
     password: "web1234",
   }
 
-  const newUserData = {
-    email: "orlando@gmail.com",
-    fullname: "Orli",
-    lastName: "West",
-    password: "orl123",
-  }
+  // const newUserData = {
+  //   email: "orlando@gmail.com",
+  //   fullname: "Orli",
+  //   lastName: "West",
+  //   password: "orl123",
+  // }
   const createAuth = (body) => request(app).post("/api/auth/register").send(body)
   const loginAuth = (body) => request(app).post("/api/auth/login").send(body)
 
@@ -55,8 +55,8 @@ describe("Organization API routes", () => {
     const getOrganizationById = (id, accessToken) =>
       request(app).get(`/api/organizations/${id}`).set("Cookie", accessToken)
 
-    const addUserToOrganization = (body, orgId, accessToken) =>
-      request(app).post(`/api/organizations/${orgId}/user`).send(body).set("Cookie", accessToken)
+    // const addUserToOrganization = (body, orgId, accessToken) =>
+    //   request(app).post(`/api/organizations/${orgId}/user`).send(body).set("Cookie", accessToken)
 
     // User must register first
     beforeAll(async () => {
@@ -106,33 +106,33 @@ describe("Organization API routes", () => {
       })
     })
 
-    describe("When involves another user authorization", () => {
-      beforeAll(async () => {
-        // Created another user
-        const { email, password } = newUserData
-        await createAuth(newUserData)
+    // describe("When involves another user authorization", () => {
+    //   beforeAll(async () => {
+    //     // Created another user
+    //     const { email, password } = newUserData
+    //     await createAuth(newUserData)
 
-        const newLoginResponse = await loginAuth({ email, password })
-        newToken = await newLoginResponse.get("set-cookie")[0]
-      })
+    //     const newLoginResponse = await loginAuth({ email, password })
+    //     newToken = await newLoginResponse.get("set-cookie")[0]
+    //   })
 
-      test("Should not see the organization created from another user", async () => {
-        response = await getOrganizationById(organizationId, newToken)
-        expect(response.status).toBe(401)
-      })
+    //   test("Should not see the organization created from another user", async () => {
+    //     response = await getOrganizationById(organizationId, newToken)
+    //     expect(response.status).toBe(401)
+    //   })
 
-      describe("Invite user to organization", () => {
-        beforeAll(async () => {
-          const { email } = newUserData
-          await addUserToOrganization({ userEmail: email }, organizationId, token)
-        })
+    //   describe("Invite user to organization", () => {
+    //     beforeAll(async () => {
+    //       const { email } = newUserData
+    //       await addUserToOrganization({ userEmail: email }, organizationId, token)
+    //     })
 
-        test("Should see the organization created from another user when is \
-        invited to participate in", async () => {
-          response = await getOrganizationById(organizationId, newToken)
-          expect(response.status).toBe(200)
-        })
-      })
-    })
+    //     test("Should see the organization created from another user when is \
+    //     invited to participate in", async () => {
+    //       response = await getOrganizationById(organizationId, newToken)
+    //       expect(response.status).toBe(200)
+    //     })
+    //   })
+    // })
   })
 })
