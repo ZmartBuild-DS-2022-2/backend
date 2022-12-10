@@ -16,6 +16,7 @@ const updateProjectController = async (req, res) => {
   try {
     await Project.update(updater, { where: { id: id } })
     const project = await Project.findByPk(id)
+
     return res.status(200).json({
       id: project.id,
       name: project.name,

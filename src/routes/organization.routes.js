@@ -1,36 +1,45 @@
 import {
-  addUserToOrganizationController,
+  updateOrganizationController,
   createOrganizationController,
   deleteOrganizationController,
   getOrganizationByIdController,
   getUserOrganizationsController,
+  getOrganizationProjectsController,
 } from "../controllers/organization/index.js"
 
 import { Router } from "express"
 import verifyToken from "../middlewares/auth.js"
-import verifyOrganizationPermission from "../middlewares/organization.js"
+import verifyReadOrganizationPermission from "../middlewares/organization/readOrganization.js"
+import verifyWriteOrganizationPermission from "../middlewares/organization/writeOrganization.js"
 
 const router = Router()
 
 router.post("/", [verifyToken], createOrganizationController)
+
 router.get("/", [verifyToken], getUserOrganizationsController)
 
 router.get(
   "/:organizationId",
-  [verifyToken, verifyOrganizationPermission],
+  [verifyToken, verifyReadOrganizationPermission],
   getOrganizationByIdController
+)
+
+router.get(
+  "/:organizationId/projects",
+  [verifyToken, verifyReadOrganizationPermission],
+  getOrganizationProjectsController
 )
 
 router.delete(
   "/:organizationId",
-  [verifyToken, verifyOrganizationPermission],
+  [verifyToken, verifyWriteOrganizationPermission],
   deleteOrganizationController
 )
 
-router.post(
-  "/:organizationId/user",
-  [verifyToken, verifyOrganizationPermission],
-  addUserToOrganizationController
+router.patch(
+  "/:organizationId",
+  [verifyToken, verifyWriteOrganizationPermission],
+  updateOrganizationController
 )
 
 export default router

@@ -1,16 +1,19 @@
 import { Organization, ProjectImage } from "../../config/db.js"
 
-const getProjectByIdController = async (req, res) => {
+const getOrganizationProjectsController = async (req, res) => {
   const { currentUser } = req
-  const { projectId } = req.params
+  const { organizationId } = req.params
+  const { limit } = req.query
   try {
-    const project = await currentUser.getUserProjects({
-      attributes: ["id", "name", "description"],
-      where: { id: projectId },
-      joinTableAttributes: ["role"],
+    const projects = await currentUser.getUserProjects({
+      attributes: ["id", "name", "description", "createdAt"],
+      limit,
+      order: [["createdAt", "DESC"]],
+      joinTableAttributes: [],
       include: [
         {
           model: Organization,
+          where: organizationId ? { id: organizationId } : {},
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
@@ -19,8 +22,7 @@ const getProjectByIdController = async (req, res) => {
         },
       ],
     })
-    if (project.length > 0) return res.status(200).json(project[0])
-    return res.status(404).send(`Couldn't find project with id ${projectId}`)
+    return res.status(200).json(projects)
   } catch (err) {
     try {
       return res.status(400).send(err.errors[0]?.message)
@@ -30,4 +32,4 @@ const getProjectByIdController = async (req, res) => {
   }
 }
 
-export default getProjectByIdController
+export default getOrganizationProjectsController

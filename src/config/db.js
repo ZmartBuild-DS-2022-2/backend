@@ -4,6 +4,7 @@ import {
   OrganizationModel,
   ProjectModel,
   ProjectPermissionModel,
+  OrganizationPermissionModel,
   ProjectImageModel,
   SubprojectModel,
   SubprojectImageModel,
@@ -26,6 +27,7 @@ export const User = UserModel(sequelize, Sequelize)
 export const Organization = OrganizationModel(sequelize, Sequelize)
 export const Project = ProjectModel(sequelize, Sequelize)
 export const ProjectPermission = ProjectPermissionModel(sequelize, Sequelize)
+export const OrganizationPermission = OrganizationPermissionModel(sequelize, Sequelize)
 export const ProjectImage = ProjectImageModel(sequelize, Sequelize)
 export const Subproject = SubprojectModel(sequelize, Sequelize)
 export const SubprojectImage = SubprojectImageModel(sequelize, Sequelize)
@@ -34,8 +36,8 @@ export const Invitation = InvitationModel(sequelize, Sequelize)
 
 const ormConfig = async () => {
   // Associations
-  User.belongsToMany(Organization, { through: "OrganizationPermission", as: "userOrganizations" })
-  Organization.belongsToMany(User, { through: "OrganizationPermission", as: "organizationUsers" })
+  User.belongsToMany(Organization, { through: OrganizationPermission, as: "userOrganizations" })
+  Organization.belongsToMany(User, { through: OrganizationPermission, as: "organizationUsers" })
 
   Organization.hasMany(Project)
   Project.belongsTo(Organization)
