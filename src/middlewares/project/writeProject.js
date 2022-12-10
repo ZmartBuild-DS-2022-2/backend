@@ -1,31 +1,37 @@
-import { User } from "../../config/db.js"
+import { Subproject, Project, ProjectPermission } from "../../config/db.js"
 
 const verifyWriteProjectPermmission = async (req, res, next) => {
-  const id = req.params.projectId
+  const { currentUser } = req
+  const { projectId, subprojectId } = req.params
 
-  const userProjects = await User.findByPk(req.currentUser.id, { include: "projects" })
-
-  const projects = []
-  userProjects.projects.forEach((item) => {
-    projects.push({
-      id: item.id,
-      role: item.projectPermission.role,
-    })
-  })
-
-  let permission = false
-  projects.forEach((item) => {
-    if (id == item.id) {
-      if (item.role == "a" || item.role == "w") {
-        permission = true
-      }
+  let subproject
+  try {
+    if (subprojectId) {
+      subproject = await Subproject.findByPk(subprojectId, {
+        include: [
+          {
+            model: Project,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
+      })
     }
-  })
 
-  if (permission) {
-    return next()
+    const permission = await ProjectPermission.findOne({
+      where: {
+        userId: currentUser.id,
+        projectId: projectId ? projectId : subproject.project.id,
+        role: ["a", "w"],
+      },
+    })
+
+    if (permission) {
+      return next()
+    }
+    return res.sendStatus(401)
+  } catch (err) {
+    return res.sendStatus(401)
   }
-  return res.sendStatus(404)
 }
 
 export default verifyWriteProjectPermmission

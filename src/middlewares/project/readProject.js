@@ -1,26 +1,32 @@
-import { Project, User } from "../../config/db.js"
+import { Project, Subproject, ProjectPermission } from "../../config/db.js"
 
 const verifyReadProjectPermission = async (req, res, next) => {
-  const { projectId } = req.params
+  const { currentUser } = req
+  const { projectId, subprojectId } = req.params
+
+  let subproject
   try {
-    const userProjects = await User.findByPk(req.currentUser.id, {
-      include: [
-        {
-          model: Project,
-          as: "userProjects",
-          where: { id: projectId },
-        },
-      ],
+    if (subprojectId) {
+      subproject = await Subproject.findByPk(subprojectId, {
+        include: [
+          {
+            model: Project,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          },
+        ],
+      })
+    }
+
+    const permission = await ProjectPermission.findOne({
+      where: { userId: currentUser.id, projectId: projectId ? projectId : subproject.project.id },
     })
 
-    if (userProjects) {
+    if (permission) {
       return next()
     }
     return res.sendStatus(401)
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err)
-    return res.sendStatus(404)
+    return res.sendStatus(401)
   }
 }
 
