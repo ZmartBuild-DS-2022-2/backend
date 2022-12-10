@@ -39,7 +39,7 @@ const createInvitationController = async (req, res) => {
   // Verificamos que el usuario no tenga esa organizacion asignada
   let userIsInThisOrganization
   if (type == "organization")
-    userIsInThisOrganization = await userObjective.hasOrganization(organization) // 
+    userIsInThisOrganization = await userObjective.hasOrganization(organization) //
   else return res.status(400).send(`Can't create invitation for ${type} type`)
 
   if (userIsInThisOrganization)
