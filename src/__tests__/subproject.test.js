@@ -2,7 +2,7 @@ import request from "supertest"
 import app from "../app.js"
 import orm_config, { Subproject } from "../config/db.js"
 
-describe("Project API routes", () => {
+describe.skip("Project API routes", () => {
   let response
   let newResponse
   let projectId
