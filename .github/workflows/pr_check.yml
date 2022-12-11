@@ -1,3 +1,6 @@
+name: Pull request quality checks
+on: pull_request
+
 jobs:
   pull_request_checks:
     name: Linters and tests
