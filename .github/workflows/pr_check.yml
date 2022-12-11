@@ -14,7 +14,6 @@ jobs:
       DB_TEST_USER: testUser
       DB_TEST_PASSWORD: testPassword
       JWT_SECRET: 68df8368bdb929b00ad32cd1470316720629db19edcef9a5f915a36e2cd7165b
-      DB_TEST_SSL: "true"
       NODE_ENV: test
 
     services:
