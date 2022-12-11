@@ -2,7 +2,6 @@ import { Invitation, Project, Organization } from "../../config/db.js"
 
 const updateInvitationController = async (req, res) => {
   const { id, state, accessType } = req.body
-  //aq qui se manda el id de la invitacion 
   if (!state || !accessType || !id) return res.status(400).send("You must send all required info")
 
   if (!(state == "Accepted" || state == "Declined" || state == "Waiting"))

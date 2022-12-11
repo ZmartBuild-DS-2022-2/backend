@@ -17,7 +17,7 @@ const createInvitationController = async (req, res) => {
 
   if (!userObjective) return res.status(400).send("We couldn't find the user :(")
 
-    // ------- VERIFICO QUE EL USER OBJETIVO QUE INVITAMOS, NO ESTÉ EN LA ORGANIZACION -----
+  // ------- VERIFICO QUE EL USER OBJETIVO QUE INVITAMOS, NO ESTÉ EN LA ORGANIZACION -----
   // obtenemos la organizacion de la invitacion
   const organization = await Organization.findByPk(objectiveId)
 
@@ -44,7 +44,7 @@ const createInvitationController = async (req, res) => {
 
   if (prevInvitation)
     return res.status(400).send(`You have already sent an invitation for this ${type} to the user`)
-  
+
   //-----
   const data = {
     type: type,
