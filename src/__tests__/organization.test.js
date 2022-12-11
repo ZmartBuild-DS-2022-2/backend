@@ -125,6 +125,7 @@ describe("Organization API routes", () => {
       })
 
       describe("Invite user to organization", () => {
+        let invitationResponseId
         beforeAll(async () => {
           // Create an invitation to the new user
           // AccessType is irrelevant here
@@ -140,20 +141,30 @@ describe("Organization API routes", () => {
             { objectiveId, email, type, accessType },
             token
           )
-
-          // We simulate the user accepting the invitation
-          const updateInvitationData = {
-            id: invitationResponse.body.id,
-            accessType: "a",
-            state: "Accepted",
-          }
-          await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
+          invitationResponseId = invitationResponse.body.id
         })
 
-        test("Should see the organization created from another user when is \
-        invited to participate in", async () => {
-          response = await getOrganizationById(organizationId, newToken)
-          expect(response.status).toBe(200)
+        describe("User did not accepted the invitation", () => {
+          test("Should not see organization if not accepted", async () => {
+            response = await getOrganizationById(organizationId, newToken)
+            expect(response.status).toBe(401)
+          })
+        })
+        describe("User accepted the invitation", () => {
+          beforeAll(async () => {
+            // We simulate the user accepting the invitation
+            const updateInvitationData = {
+              id: invitationResponseId,
+              accessType: "a",
+              state: "Accepted",
+            }
+            await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
+          })
+
+          test("Should see the organization created when accepted", async () => {
+            response = await getOrganizationById(organizationId, newToken)
+            expect(response.status).toBe(200)
+          })
         })
       })
     })
