@@ -1,8 +1,7 @@
 import { Subproject } from "../../config/db.js"
 
 const deleteSubprojectController = async (req, res) => {
-  const id = req.params.projectId
-  console.log("ENTRA MUAK")
+  const id = req.params.subprojectId
 
   try {
     await Subproject.destroy({ where: { id: id } })

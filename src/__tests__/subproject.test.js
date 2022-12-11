@@ -2,10 +2,11 @@ import request from "supertest"
 import app from "../app.js"
 import orm_config, { Subproject } from "../config/db.js"
 
-describe.skip("Project API routes", () => {
+describe("Project API routes", () => {
   let response
   let newResponse
   let projectId
+  let subprojectId
   let organizationId
   let token
   let testServer
@@ -52,12 +53,20 @@ describe.skip("Project API routes", () => {
   // }
 
   const subprojectData = {
-    title: "title subproyecto",
-    description: "subproyecto_desc",
+    title: "subproject",
+    description: "subproject descripction",
     images: {},
     gltf_file: {},
     bin_file: {},
   }
+
+  // const subprojectDataUpdated = {
+  //   title: "ubproject updated",
+  //   description: "subproject descripction updated",
+  //   images: {},
+  //   gltf_file: {},
+  //   bin_file: {},
+  // }
 
   const newSubprojectData = {
     title: "title subproyecto2",
@@ -87,6 +96,18 @@ describe.skip("Project API routes", () => {
   const deleteSubproject = (subprojId, accessToken) =>
     request(app).delete(`/api/subprojects/${subprojId}`).set("Cookie", accessToken)
 
+  
+  const getSubprojectById = (subprojId, accessToken) =>
+    request(app).get(`/api/subprojects/${subprojId}`).set("Cookie", accessToken)
+
+  const getUserSubprojects = (accessToken) =>
+    request(app).get("/api/subprojects").set("Cookie", accessToken)
+
+    // const updateSubproject = (body, subprojId, accessToken) =>
+    // request(app).patch(`/api/subprojects/${subprojId}`).send(body).set("Cookie", accessToken)
+
+
+
   beforeAll(async () => {
     // Create and login user
     const { email, password } = userData
@@ -105,6 +126,7 @@ describe.skip("Project API routes", () => {
     // Create subsub project
     response = await authCreateSubproject(subprojectData, projectId, token)
     newResponse = await unauthCreateSubproject(subprojectData, projectId)
+    subprojectId = response.body.id
   })
 
   test("Should be able to create subproject, expect 201 status code", async () => {
@@ -116,18 +138,34 @@ describe.skip("Project API routes", () => {
     expect(newResponse.status).toBe(401)
   })
 
+  test("Should be able to get subproject BY ID expect 200 status code", async () => {
+    response = await getSubprojectById(subprojectId, token)
+    expect(response.status).toBe(200)
+  })
+
+  test("Should be able to get user subprojects, expect 200 status code", async () => {
+    response = await getUserSubprojects(token)
+    expect(response.status).toBe(200)
+  })
+
+  //  test("Should be able to update subproject, expect 200 status code", async () => {
+  //   response = await updateSubproject()
+
+  // })
+
+
+
+
+
   test("should delete subproject ", async () => {
     // Create new subproject
     const newSubproject = await authCreateSubproject(newSubprojectData, projectId, token)
     const newSubprojectId = newSubproject.body.id
-    console.log("MIAU", newSubprojectId)
 
     expect(await Subproject.count()).toBe(2)
     // If we eliminate 1, count should be 1
-    const deletex = await deleteSubproject(newSubprojectId, token)
-    console.log(deletex)
-    //No retorna 1, retorna 2 (no se elimina)
-    // expect( Subproject.count()).toBe(1)
+    await deleteSubproject(newSubprojectId, token)
+    expect( await Subproject.count()).toBe(1)
   })
 
   // Remains permission testing
