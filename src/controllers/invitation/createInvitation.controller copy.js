@@ -17,19 +17,6 @@ const createInvitationController = async (req, res) => {
 
   if (!userObjective) return res.status(400).send("We couldn't find the user :(")
 
-    // ------- VERIFICO QUE EL USER OBJETIVO QUE INVITAMOS, NO ESTÉ EN LA ORGANIZACION -----
-  // obtenemos la organizacion de la invitacion
-  const organization = await Organization.findByPk(objectiveId)
-
-  // Verificamos que el usuario no tenga esa organizacion asignada
-  let userIsInThisOrganization
-  if (type == "organization")
-    userIsInThisOrganization = await userObjective.hasUserOrganizations(organization) //
-  else return res.status(400).send(`Can't create invitation for ${type} type`)
-
-  if (userIsInThisOrganization)
-    return res.status(400).send(`The user already belongs to that organization.`)
-
   // Check if there is already an invitation
   let prevInvitation
   if (type == "project")
@@ -44,8 +31,20 @@ const createInvitationController = async (req, res) => {
 
   if (prevInvitation)
     return res.status(400).send(`You have already sent an invitation for this ${type} to the user`)
-  
-  //-----
+
+  // ------- VERIFICO QUE EL USER OBJETIVO QUE INVITAMOS, NO ESTÉ EN LA ORGANIZACION -----
+  // obtenemos la organizacion de la invitacion
+  const organization = await Organization.findByPk(objectiveId)
+
+  // Verificamos que el usuario no tenga esa organizacion asignada
+  let userIsInThisOrganization
+  if (type == "organization")
+    userIsInThisOrganization = await userObjective.hasUserOrganizations(organization) //
+  else return res.status(400).send(`Can't create invitation for ${type} type`)
+
+  if (userIsInThisOrganization)
+    return res.status(400).send(`The user already belongs to that organization.`)
+
   const data = {
     type: type,
     accessType: accessType,
