@@ -1,16 +1,41 @@
 name: Pull request quality checks
-
 on: pull_request
 
 jobs:
   pull_request_checks:
+    name: Linters and tests
+    timeout-minutes: 10
     runs-on: ubuntu-latest
+
+    env:
+      DB_TEST_HOST: localhost
+      DB_TEST_NAME: test
+      DB_DIALECT: postgres
+      DB_TEST_USER: testUser
+      DB_TEST_PASSWORD: testPassword
+      JWT_SECRET: 68df8368bdb929b00ad32cd1470316720629db19edcef9a5f915a36e2cd7165b
+      NODE_ENV: test
+
+    services:
+      db:
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: testUser
+          POSTGRES_PASSWORD: testPassword
+        image: postgres:12-alpine
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        node-version: [16.x]
     steps:
       - name: Check out code
         uses: actions/checkout@v3
-
-      - name: Set up node
-        uses: actions/setup-node@v3
 
       - name: Install dependencies
         run: npm install
@@ -18,8 +43,8 @@ jobs:
       - name: Run linters
         run: npm run lint
 
-      # - name: Run tests
-      #   run: npm test
-
       - name: Run prettier
         run: npm run format
+
+      - name: Run tests
+        run: npm run test

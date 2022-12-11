@@ -55,8 +55,11 @@ describe("Organization API routes", () => {
     const getOrganizationById = (id, accessToken) =>
       request(app).get(`/api/organizations/${id}`).set("Cookie", accessToken)
 
-    const addUserToOrganization = (body, orgId, accessToken) =>
-      request(app).post(`/api/organizations/${orgId}/user`).send(body).set("Cookie", accessToken)
+    const inviteUserToOrganization = (body, accessToken) =>
+      request(app).post(`/api/invitations`).send(body).set("Cookie", accessToken)
+
+    const respondUserInvitation = (body, invitationId, accessToken) =>
+      request(app).patch(`/api/invitations/${invitationId}`).send(body).set("Cookie", accessToken)
 
     // User must register first
     beforeAll(async () => {
@@ -81,9 +84,9 @@ describe("Organization API routes", () => {
     describe("When user is authorized with token", () => {
       beforeAll(async () => {
         const { email, password } = userData
-        const login_response = await loginAuth({ email, password })
+        const loginResponse = await loginAuth({ email, password })
 
-        token = await login_response.get("set-cookie")[0]
+        token = await loginResponse.get("set-cookie")[0]
         response = await authCreateOrganization(organizationData, token)
         organizationId = await response.body.id
       })
@@ -122,15 +125,46 @@ describe("Organization API routes", () => {
       })
 
       describe("Invite user to organization", () => {
+        let invitationResponseId
         beforeAll(async () => {
-          const { email } = newUserData
-          await addUserToOrganization({ userEmail: email }, organizationId, token)
+          // Create an invitation to the new user
+          // AccessType is irrelevant here
+          const invitationData = {
+            objectiveId: organizationId,
+            email: newUserData.email,
+            type: "organization",
+            accessType: "a",
+          }
+
+          const { objectiveId, email, type, accessType } = invitationData
+          const invitationResponse = await inviteUserToOrganization(
+            { objectiveId, email, type, accessType },
+            token
+          )
+          invitationResponseId = invitationResponse.body.id
         })
 
-        test("Should see the organization created from another user when is \
-        invited to participate in", async () => {
-          response = await getOrganizationById(organizationId, newToken)
-          expect(response.status).toBe(200)
+        describe("User did not accepted the invitation", () => {
+          test("Should not see organization if not accepted", async () => {
+            response = await getOrganizationById(organizationId, newToken)
+            expect(response.status).toBe(401)
+          })
+        })
+        describe("User accepted the invitation", () => {
+          beforeAll(async () => {
+            // We simulate the user accepting the invitation
+            const updateInvitationData = {
+              id: invitationResponseId,
+              accessType: "a",
+              state: "Accepted",
+            }
+            await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
+          })
+
+          test("Should see the organization created when accepted", async () => {
+            response = await getOrganizationById(organizationId, newToken)
+            expect(response.status).toBe(200)
+          })
         })
       })
     })
