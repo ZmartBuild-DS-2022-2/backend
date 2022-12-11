@@ -124,7 +124,7 @@ describe("Organization API routes", () => {
         expect(response.status).toBe(401)
       })
 
-      describe.skip("Invite user to organization", () => {
+      describe("Invite user to organization", () => {
         beforeAll(async () => {
           // Create an invitation to the new user
           // AccessType is irrelevant here
@@ -147,7 +147,7 @@ describe("Organization API routes", () => {
             accessType: "a",
             state: "Accepted",
           }
-          await respondUserInvitation(updateInvitationData, updateInvitationData.id, token)
+          await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
         })
 
         test("Should see the organization created from another user when is \
