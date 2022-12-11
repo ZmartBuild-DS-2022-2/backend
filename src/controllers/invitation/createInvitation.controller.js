@@ -17,26 +17,21 @@ const createInvitationController = async (req, res) => {
 
   if (!userObjective) return res.status(400).send("We couldn't find the user :(")
 
-
   // Verificamos que el usuario no tenga ese projecto asignado, o esa organizacion asignada
   let proyecto
   let organization
   let userIsInThisOrganization
   let userIsInThisProject
 
-  if (type == "project"){
+  if (type == "project") {
     proyecto = await Project.findByPk(objectiveId)
     userIsInThisProject = await userObjective.hasUserProjects(proyecto)
-  }
-  else if (type == "organization"){
+  } else if (type == "organization") {
     organization = await Organization.findByPk(objectiveId)
     userIsInThisOrganization = await userObjective.hasUserOrganizations(organization)
-  }
-  else return res.status(400).send(`Can't create invitation for ${type} type`)
+  } else return res.status(400).send(`Can't create invitation for ${type} type`)
 
-
-  if (userIsInThisProject)
-  return res.status(400).send(`The user already belongs to that project.`)
+  if (userIsInThisProject) return res.status(400).send(`The user already belongs to that project.`)
 
   if (userIsInThisOrganization)
     return res.status(400).send(`The user already belongs to that organization.`)
