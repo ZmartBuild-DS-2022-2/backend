@@ -96,17 +96,14 @@ describe("Project API routes", () => {
   const deleteSubproject = (subprojId, accessToken) =>
     request(app).delete(`/api/subprojects/${subprojId}`).set("Cookie", accessToken)
 
-  
   const getSubprojectById = (subprojId, accessToken) =>
     request(app).get(`/api/subprojects/${subprojId}`).set("Cookie", accessToken)
 
   const getUserSubprojects = (accessToken) =>
     request(app).get("/api/subprojects").set("Cookie", accessToken)
 
-    // const updateSubproject = (body, subprojId, accessToken) =>
-    // request(app).patch(`/api/subprojects/${subprojId}`).send(body).set("Cookie", accessToken)
-
-
+  // const updateSubproject = (body, subprojId, accessToken) =>
+  // request(app).patch(`/api/subprojects/${subprojId}`).send(body).set("Cookie", accessToken)
 
   beforeAll(async () => {
     // Create and login user
@@ -153,10 +150,6 @@ describe("Project API routes", () => {
 
   // })
 
-
-
-
-
   test("should delete subproject ", async () => {
     // Create new subproject
     const newSubproject = await authCreateSubproject(newSubprojectData, projectId, token)
@@ -165,7 +158,7 @@ describe("Project API routes", () => {
     expect(await Subproject.count()).toBe(2)
     // If we eliminate 1, count should be 1
     await deleteSubproject(newSubprojectId, token)
-    expect( await Subproject.count()).toBe(1)
+    expect(await Subproject.count()).toBe(1)
   })
 
   // Remains permission testing
