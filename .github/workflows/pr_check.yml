@@ -7,6 +7,17 @@ jobs:
     name: Tests and linters
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    services:
+      db:
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        image: postgres:12-alpine
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     env:
       DB_TEST_HOST: postgresql://localhost/postgres
       DB_TEST_NAME: postgres
@@ -14,22 +25,11 @@ jobs:
       DB_TEST_USER: postgres
       DB_TEST_PASSWORD: password
       JWT_SECRET: 68df8368bdb929b00ad32cd1470316720629db19edcef9a5f915a36e2cd7165b
-      DB_TEST_SSL: "true"
+      DB_TEST_SSL: true
       NODE_ENV: test
-    services:
-      db:
-        env:
-          POSTGRES_HOST_AUTH_METHOD: trust
-        image: postgres:12-alpine
-        ports: ['5432:5432']
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     strategy:
       matrix:
-        node-version: [ 16.x ]
+        node-version: [16.x]
     steps:
       - name: Check out code
         uses: actions/checkout@v3
