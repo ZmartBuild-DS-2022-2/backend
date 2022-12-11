@@ -121,7 +121,7 @@ describe("Project API routes", () => {
     request(app).get("/api/subprojects").set("Cookie", accessToken)
 
   const updateSubproject = (body, subprojId, accessToken) =>
-  request(app).patch(`/api/subprojects/${subprojId}`).send(body).set("Cookie", accessToken)
+    request(app).patch(`/api/subprojects/${subprojId}`).send(body).set("Cookie", accessToken)
 
   beforeAll(async () => {
     // Create and login user
@@ -163,10 +163,9 @@ describe("Project API routes", () => {
     expect(response.status).toBe(200)
   })
 
-   test("Should be able to update subproject, expect 200 status code", async () => {
-    response = await updateSubproject(subprojectDataUpdated,subprojectId, token)
+  test("Should be able to update subproject, expect 200 status code", async () => {
+    response = await updateSubproject(subprojectDataUpdated, subprojectId, token)
     expect(response.status).toBe(200)
-
   })
 
   test("should delete subproject ", async () => {
@@ -181,9 +180,8 @@ describe("Project API routes", () => {
   })
 
   // Permission testing
-  
+
   describe("When involves another user authorization", () => {
-    
     beforeAll(async () => {
       // Created another user Permission
       const { email, password } = newUserData
@@ -201,7 +199,7 @@ describe("Project API routes", () => {
     })
 
     test("Should not edit the subproject created from another user", async () => {
-      response = await updateSubproject(subprojectDataUpdated,subprojectId, newToken)
+      response = await updateSubproject(subprojectDataUpdated, subprojectId, newToken)
       expect(response.status).toBe(401)
     })
 
@@ -213,57 +211,56 @@ describe("Project API routes", () => {
     //AFTER INVITATION ACCESS
 
     describe("Invite user to project", () => {
+      // Create an invitation to the new user
+      // AccessType is irrelevant here
 
-        // Create an invitation to the new user
-        // AccessType is irrelevant here
+      test("User received an invitation but it isn't accepted yet", async () => {
+        const invitationData = {
+          objectiveId: projectId,
+          email: newUserData.email,
+          type: "project",
+          accessType: "a",
+        }
+        const { objectiveId, email, type, accessType } = invitationData
+        const invitationResponse = await inviteUserToProject(
+          { objectiveId, email, type, accessType },
+          token
+        )
+        invitationResponseId = await invitationResponse.body.id
 
-        test("User received an invitation but it isn't accepted yet", async () => {
-          const invitationData = {
-            objectiveId: projectId,
-            email: newUserData.email,
-            type: "project",
-            accessType: "a",
-          }
-          const { objectiveId, email, type, accessType } = invitationData
-          const invitationResponse = await inviteUserToProject(
-            { objectiveId, email, type, accessType },
-            token
-          )
-          invitationResponseId = await invitationResponse.body.id
-  
-          response = await getSubprojectById(subprojectId, newToken)
-          expect(response.status).toBe(401)
-        })
+        response = await getSubprojectById(subprojectId, newToken)
+        expect(response.status).toBe(401)
+      })
 
-        test("User accepted the invitation & should be able to get user subprojects,\
+      test("User accepted the invitation & should be able to get user subprojects,\
          expect 200 status code", async () => {
-          // We simulate the new user accepting the invitation
-          const updateInvitationData = {
-            id: invitationResponseId,
-            accessType: "a",
-            state: "Accepted",
-          }
-          await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
-        
-          response = await getSubprojectById(subprojectId, newToken)
-          expect(response.status).toBe(200)
-        })
+        // We simulate the new user accepting the invitation
+        const updateInvitationData = {
+          id: invitationResponseId,
+          accessType: "a",
+          state: "Accepted",
+        }
+        await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
 
-        test("User accepted the invitation & should be able to edit user subprojects,\
+        response = await getSubprojectById(subprojectId, newToken)
+        expect(response.status).toBe(200)
+      })
+
+      test("User accepted the invitation & should be able to edit user subprojects,\
         expect 200 status code", async () => {
-         // We simulate the new user accepting the invitation
-         const updateInvitationData = {
-           id: invitationResponseId,
-           accessType: "a",
-           state: "Accepted",
-         }
-         await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
-       
-         response = await updateSubproject(subprojectDataUpdated, subprojectId, newToken)
-         expect(response.status).toBe(200)
-       })
+        // We simulate the new user accepting the invitation
+        const updateInvitationData = {
+          id: invitationResponseId,
+          accessType: "a",
+          state: "Accepted",
+        }
+        await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
 
-       test("User accepted the invitation & should be able to delete user subprojects,\
+        response = await updateSubproject(subprojectDataUpdated, subprojectId, newToken)
+        expect(response.status).toBe(200)
+      })
+
+      test("User accepted the invitation & should be able to delete user subprojects,\
        expect 200 status code", async () => {
         // We simulate the new user accepting the invitation
         const updateInvitationData = {
@@ -272,13 +269,10 @@ describe("Project API routes", () => {
           state: "Accepted",
         }
         await respondUserInvitation(updateInvitationData, updateInvitationData.id, newToken)
-      
+
         response = await deleteSubproject(subprojectId, newToken)
         expect(response.status).toBe(200)
       })
-      })
+    })
   })
 })
-
-
-
