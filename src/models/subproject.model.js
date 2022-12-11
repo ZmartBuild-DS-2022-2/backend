@@ -9,7 +9,6 @@ const SubProjectModel = (sequelize, type) => {
     title: {
       type: type.STRING,
       allowNull: { args: false, msg: "Title provided can't be empty" },
-      unique: { args: true, msg: "The Title is already in use" },
       validate: {
         notEmpty: { args: true, msg: "Title provided can't be empty" },
       },
