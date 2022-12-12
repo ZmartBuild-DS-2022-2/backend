@@ -39,29 +39,29 @@ const ormConfig = async () => {
   User.belongsToMany(Organization, { through: OrganizationPermission, as: "userOrganizations" })
   Organization.belongsToMany(User, { through: OrganizationPermission, as: "organizationUsers" })
 
-  Organization.hasMany(Project)
+  Organization.hasMany(Project, { onDelete: "cascade" })
   Project.belongsTo(Organization)
 
   User.belongsToMany(Project, { through: ProjectPermission, as: "userProjects" })
   Project.belongsToMany(User, { through: ProjectPermission, as: "projectUsers" })
 
-  Project.hasMany(ProjectImage)
+  Project.hasMany(ProjectImage, { onDelete: "cascade" })
   ProjectImage.belongsTo(Project)
 
-  Project.hasMany(Subproject)
+  Project.hasMany(Subproject, { onDelete: "cascade" })
   Subproject.belongsTo(Project)
 
-  Subproject.hasMany(SubprojectImage)
+  Subproject.hasMany(SubprojectImage, { onDelete: "cascade" })
   SubprojectImage.belongsTo(Project)
 
-  Subproject.hasMany(Gltf)
+  Subproject.hasMany(Gltf, { onDelete: "cascade" })
   Gltf.belongsTo(Project)
 
-  User.hasMany(Invitation)
+  User.hasMany(Invitation, { onDelete: "cascade" })
   Invitation.belongsTo(User)
 
-  Organization.hasMany(Invitation)
-  Project.hasMany(Invitation)
+  Organization.hasMany(Invitation, { onDelete: "cascade" })
+  Project.hasMany(Invitation, { onDelete: "cascade" })
   Invitation.belongsTo(Organization, { foreignKey: "organizationId" })
   Invitation.belongsTo(Project, { foreignKey: "projectId" })
 
