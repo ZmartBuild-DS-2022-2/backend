@@ -40,7 +40,7 @@ const createSubprojectController = async (req, res) => {
         await newSubproject.addProjectImage(newSubprojectImage)
       })
     )
-    
+
     if (existsModel) {
       try {
         // 3D models are created and saved
@@ -53,7 +53,7 @@ const createSubprojectController = async (req, res) => {
         return res.status(400).send("Something went wrong uploading the model")
       }
     }
-    
+
     return res.status(201).json({
       id: newSubproject.id,
       title: newSubproject.title,

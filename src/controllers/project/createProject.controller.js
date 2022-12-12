@@ -20,7 +20,6 @@ const createProjectController = async (req, res) => {
           const uploadParams = { Key: `images/projects/${newProject.id}/${imageFile.name}` }
           const imgUrl = await uploadFileToS3(imageFile, uploadParams)
           imgUrls.push(imgUrl)
-
         })
       )
     }

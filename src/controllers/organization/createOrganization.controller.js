@@ -18,7 +18,7 @@ const createOrganizationController = async (req, res) => {
       const params = { Key: `images/organizations/${newOrganization.id}/logo` }
       imgUrl = await uploadFileToS3(image, params)
     }
-    
+
     let newOrganization = await organization.save({
       fields: ["name", "email", "description", "websiteUrl"],
     })
