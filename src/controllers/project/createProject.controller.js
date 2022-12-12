@@ -13,29 +13,28 @@ const createProjectController = async (req, res) => {
   const project = Project.build(req.body)
 
   try {
+    let imgUrls = []
+    if (imagesFiles) {
+      await Promise.all(
+        imagesFiles.map(async (imageFile) => {
+          const uploadParams = { Key: `images/projects/${newProject.id}/${imageFile.name}` }
+          const imgUrl = await uploadFileToS3(imageFile, uploadParams)
+          imgUrls.push(imgUrl)
+        })
+      )
+    }
+
     const newProject = await project.save({ fields: ["name", "description"] })
     await organization.addProject(newProject)
     await user.addUserProject(newProject, { through: { role: "a" } })
 
-    try {
-      if (imagesFiles) {
-        await Promise.all(
-          imagesFiles.map(async (imageFile) => {
-            const uploadParams = { Key: `images/projects/${newProject.id}/${imageFile.name}` }
-            const imgUrl = await uploadFileToS3(imageFile, uploadParams)
-            const image = ProjectImage.build({ url: imgUrl })
-            const newProjectImage = await image.save({ fields: ["url"] })
-            await newProject.addProjectImage(newProjectImage)
-          })
-        )
-      }
-    } catch (err) {
-      try {
-        return res.status(400).send(err.errors[0]?.message)
-      } catch {
-        return res.status(400).send("Something went wrong")
-      }
-    }
+    await Promise.all(
+      imgUrls.map(async (imgUrl) => {
+        const image = ProjectImage.build({ url: imgUrl })
+        const newProjectImage = await image.save({ fields: ["url"] })
+        await newProject.addProjectImage(newProjectImage)
+      })
+    )
 
     return res.status(201).json({
       id: newProject.id,
